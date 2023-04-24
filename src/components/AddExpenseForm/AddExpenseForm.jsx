@@ -63,7 +63,7 @@ const AddExpenseForm = ({ categories, groupId }) => {
   return (
     <div>
       <Typography variant="h5" margin="20px 0px">Add New Expense</Typography>
-      <Stack direction="row" spacing={2} sx={{ marginBottom: "40px" }}>
+      <Stack direction="row" spacing={2} sx={{ marginBottom: "20px" }}>
         <FormControl>
           <InputLabel id="demo-simple-select-label">Category</InputLabel>
           <Select

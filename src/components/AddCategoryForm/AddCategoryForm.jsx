@@ -45,7 +45,7 @@ const AddCategoryForm = ({ groupId, budgetId }) => {
   return (
     <div>
       <Typography variant="h5">Add New Category</Typography>
-      <Stack direction="row" spacing={2} sx={{ margin: "20px 0px 40px 0px" }}>
+      <Stack direction="row" spacing={2} sx={{ margin: "20px 0px 20px 0px" }}>
         <TextField
           type="text"
           label="Category"

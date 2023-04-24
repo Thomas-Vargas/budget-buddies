@@ -22,6 +22,8 @@ const GroupDashboard = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [expenseFormToggle, setExpenseFormToggle] = useState(false);
+  const [categoryFormToggle, setCategoryFormToggle] = useState(false);
 
   const categories = useSelector((store) => store.categories);
   const currentGroup = useSelector((store) => store.currentGroup);
@@ -52,7 +54,12 @@ const GroupDashboard = () => {
   return (
     <div className="main-wrapper">
       {loading ? (
-        <Stack direction="column" justifyContent="center" alignItems="center" sx={{marginTop: "25%"}}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ marginTop: "25%" }}
+        >
           <Box>
             <CircularProgress />
           </Box>
@@ -63,7 +70,7 @@ const GroupDashboard = () => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ height: "40px", marginBottom: "40px" }}
+            sx={{ height: "40px" }}
           >
             <Typography variant="h4">{currentGroup.name}</Typography>
             <Button
@@ -77,25 +84,73 @@ const GroupDashboard = () => {
             <Stack direction="column" width="80%">
               {/* Display monthly income before tax */}
               {/* stretch: implement monthly take home based on taxes by state */}
-              <Typography variant="h5">
-                Monthly Income: {Math.round(currentGroup.totalBudget / 12)}
-              </Typography>
-
-              {/* look up stack mui for arranging items in line */}
-              <AddExpenseForm
-                groupId={currentGroup.id}
-                categories={categories}
-              />
-              <AddCategoryForm budgetId={currentGroup.id} groupId={groupId} />
 
               <Stack
-                justifyContent="flex-start"
+                direction="column"
+                gap="10px"
+                alignItems="flex-start"
                 width="100%"
-                direction="row"
-                marginBottom="20px"
+                sx={{margin: "40px 0px"}}
               >
-                <Button variant="contained" onClick={deleteAllExpenses}>
-                  Reset Expenses
+                {expenseFormToggle ? (
+                  <div>
+                    <AddExpenseForm
+                      groupId={currentGroup.id}
+                      categories={categories}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => setExpenseFormToggle(false)}
+                    >
+                      Close Form
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => setExpenseFormToggle(true)}
+                  >
+                    Add Expenses
+                  </Button>
+                )}
+
+                {categoryFormToggle ? (
+                  <div>
+                    <AddCategoryForm
+                      budgetId={currentGroup.id}
+                      groupId={groupId}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => setCategoryFormToggle(false)}
+                    >
+                      Close Form
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => setCategoryFormToggle(true)}
+                  >
+                    Add Category
+                  </Button>
+                )}
+              </Stack>
+
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{marginBottom:"40px"}}
+              >
+                <Typography variant="h5">
+                  Monthly Income: {Math.round(currentGroup.totalBudget / 12)}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={deleteAllExpenses}
+                >
+                  Reset All Expenses
                 </Button>
               </Stack>
 
