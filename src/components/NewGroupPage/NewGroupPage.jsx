@@ -6,6 +6,8 @@ import {
   Stack,
   Snackbar,
   Autocomplete,
+  Paper,
+  Typography,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import MuiAlert from "@mui/material/Alert";
@@ -153,97 +155,103 @@ const NewGroupPage = () => {
     <div className="main-wrapper">
       <div className="new-group-page">
         <div className="create-group-form">
-          <h1>Create New Group</h1>
-          <div className="form-inputs">
-            <TextField
-              type="text"
-              label="Group Name"
-              variant="outlined"
-              required
-              onChange={(e) =>
-                setNewBudget({ ...newBudget, name: e.target.value })
-              }
-            />
-            <TextField
-              type="Number"
-              label="Income"
-              variant="outlined"
-              required
-              onChange={(e) => setIncome1(e.target.value)}
-            />
-            <TextField
-              type="Number"
-              label="Income"
-              variant="outlined"
-              onChange={(e) => setIncome2(e.target.value)}
-            />
-          </div>
-
-          <div className="category-btn-group">
-            <div className="category-header">
-              <h2>Categories</h2>
-            </div>
-
-            <div className="category-form">
+          <Paper elevation={6} sx={{ padding: "40px" }}>
+            <Typography variant="h3" sx={{ mb: "40px" }}>
+              Create New Group
+            </Typography>
+            <div className="form-inputs">
               <TextField
                 type="text"
-                label="Name"
+                label="Group Name"
                 variant="outlined"
                 required
-                value={newCategory.name}
                 onChange={(e) =>
-                  setNewCategory({ ...newCategory, name: e.target.value })
+                  setNewBudget({ ...newBudget, name: e.target.value })
                 }
               />
               <TextField
                 type="Number"
-                label="Amount"
+                label="Income"
                 variant="outlined"
                 required
-                value={newCategory.budgetAmount}
-                onChange={(e) =>
-                  setNewCategory({
-                    ...newCategory,
-                    budgetAmount: Number(e.target.value),
-                  })
-                }
+                onChange={(e) => setIncome1(e.target.value)}
               />
-              <Button
-                variant="contained"
-                onClick={addCategory}
-                size="small"
-                style={{ backgroundColor: "#5B4570" }}
-              >
-                Add Category
-              </Button>
+              <TextField
+                type="Number"
+                label="Income"
+                variant="outlined"
+                onChange={(e) => setIncome2(e.target.value)}
+              />
             </div>
 
-            {categories.map((category, i) => (
-              <div className="category" key={category.name}>
-                <h3>{category.name}</h3>
+            <div className="category-btn-group">
+              <Typography variant="h3" sx={{ margin: "40px 0px" }}>
+                Categories
+              </Typography>
+
+              <div className="category-form">
+                <TextField
+                  type="text"
+                  label="Name"
+                  variant="outlined"
+                  required
+                  value={newCategory.name}
+                  onChange={(e) =>
+                    setNewCategory({ ...newCategory, name: e.target.value })
+                  }
+                />
                 <TextField
                   type="Number"
                   label="Amount"
                   variant="outlined"
                   required
-                  value={category.budgetAmount}
-                  onChange={(e) => handleCategoryChange(e, category, i)}
+                  value={newCategory.budgetAmount}
+                  onChange={(e) =>
+                    setNewCategory({
+                      ...newCategory,
+                      budgetAmount: Number(e.target.value),
+                    })
+                  }
                 />
-                <IconButton
-                  aria-label="delete"
-                  size="large"
-                  onClick={() => removeCategory(i)}
+                <Button
+                  variant="contained"
+                  onClick={addCategory}
+                  size="small"
+                  style={{ backgroundColor: "#5B4570" }}
                 >
-                  <DeleteIcon />
-                </IconButton>
+                  Add Category
+                </Button>
               </div>
-            ))}
-          </div>
+
+              {categories.map((category, i) => (
+                <div className="category" key={category.name}>
+                  <Typography variant="h4" margin="20px 0px">{category.name}</Typography>
+                  <TextField
+                    type="Number"
+                    label="Amount"
+                    variant="outlined"
+                    required
+                    value={category.budgetAmount}
+                    onChange={(e) => handleCategoryChange(e, category, i)}
+                  />
+                  <IconButton
+                    aria-label="delete"
+                    size="large"
+                    onClick={() => removeCategory(i)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
+              ))}
+            </div>
+          </Paper>
         </div>
+
         <div className="add-user">
-          <h1 className="add-user-header">Add User to Group</h1>
-          <div className="add-user-form">
-            {/* <TextField
+          <Paper elevation={6} sx={{ padding: "40px", height: "100%" }}>
+            <Typography variant="h3" margin="0px 0px 40px 0px">Add User to Group</Typography>
+            <div className="add-user-form">
+              {/* <TextField
               type="text"
               label="Username"
               variant="outlined"
@@ -253,40 +261,41 @@ const NewGroupPage = () => {
               required
             /> */}
 
-            <Autocomplete
-              options={allUsers
-                .filter((user) => user.username != currentUser.username)
-                .map((user) => user.username)}
-              sx={{ width: "60%" }}
-              onSelect={(e) => setUsername(e.target.value)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Add user"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
+              <Autocomplete
+                options={allUsers
+                  .filter((user) => user.username != currentUser.username)
+                  .map((user) => user.username)}
+                sx={{ width: "60%" }}
+                onSelect={(e) => setUsername(e.target.value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Add user"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                )}
+              />
+              <Button
+                variant="contained"
+                size="small"
+                sx={{
+                  marginLeft: "20px",
+                }}
+                style={{ backgroundColor: "#5B4570" }}
+                onClick={saveUserInState}
+              >
+                Add User
+              </Button>
+            </div>
+            <p>
+              {addedUser && (
+                <Stack direction="row" alignItems="center" gap="10px">
+                  <CheckIcon /> {addedUser}
+                </Stack>
               )}
-            />
-            <Button
-              variant="contained"
-              size="small"
-              sx={{
-                marginLeft: "20px",
-              }}
-              style={{ backgroundColor: "#5B4570" }}
-              onClick={saveUserInState}
-            >
-              Add User
-            </Button>
-          </div>
-          <p>
-            {addedUser && (
-              <Stack direction="row" alignItems="center" gap="10px">
-                <CheckIcon /> {addedUser}
-              </Stack>
-            )}
-          </p>
+            </p>
+          </Paper>
         </div>
       </div>
       <center>
@@ -294,10 +303,14 @@ const NewGroupPage = () => {
           variant="contained"
           onClick={createNewGroup}
           style={{ backgroundColor: "#5B4570" }}
+          sx={{ mt: "60px" }}
         >
           Create Group
         </Button>
       </center>
+
+      {/*  */}
+
       <Snackbar
         open={errorSnackOpen}
         autoHideDuration={6000}
