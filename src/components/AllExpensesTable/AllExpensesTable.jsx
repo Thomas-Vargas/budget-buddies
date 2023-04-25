@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Stack, Button, Box } from "@mui/material";
+import { Grid, Stack, Button, Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -15,8 +15,13 @@ const AllExpensesTable = () => {
   useEffect(() => {
     currentGroup.id &&
       dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
-      dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
+    dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
+
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 
   const columns = [
     {
@@ -27,9 +32,11 @@ const AllExpensesTable = () => {
     },
     {
       field: "amount",
+      type: "number",
       headerName: "Amount",
       width: 200,
       editable: true,
+      valueFormatter: ({ value }) => currencyFormatter.format(value),
     },
     {
       field: "categoryName",
@@ -75,10 +82,28 @@ const AllExpensesTable = () => {
   return (
     <div>
       <Grid item xs={6}>
-        <Stack direction="row" justifyContent="space-between">
-          <h3>Budget Amount: {currentGroup.totalBudget}</h3>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{ mb: "20px" }}
+        >
+          <Typography variant="h5">
+            Monthly Income:{" "}
+            {currencyFormatter.format(
+              Math.round(currentGroup.totalBudget / 12)
+            )}
+          </Typography>
         </Stack>
-        <Box sx={{height: "900px", width: "100%", marginBottom: "20px" }}>
+        <Box
+          sx={{
+            height: "900px",
+            width: "100%",
+            marginBottom: "20px",
+            "& .font-tabular-nums": {
+              fontVariantNumeric: "tabular-nums",
+            },
+          }}
+        >
           <DataGrid
             rows={rows}
             columns={columns}

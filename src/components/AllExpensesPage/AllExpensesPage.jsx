@@ -1,5 +1,5 @@
 import AllExpensesTable from "../AllExpensesTable/AllExpensesTable";
-import { Button, Stack, CircularProgress, Box } from "@mui/material";
+import { Button, Stack, CircularProgress, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
@@ -15,26 +15,37 @@ const AllExpensesPage = () => {
 
   const categoryTotals = useSelector((store) => store.categoryTotals);
 
-  setTimeout(() => {  
+  setTimeout(() => {
     setLoading(false);
   }, 1500);
 
   return (
     <div className="main-wrapper">
       {loading ? (
-        <Stack direction="column" justifyContent="center" alignItems="center" sx={{marginTop: "25%"}}>
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ marginTop: "25%" }}
+        >
           <CircularProgress />
         </Stack>
       ) : (
         <div>
-          <Stack direction="row" justifyContent="space-between">
-            <h1>{currentGroup.name}</h1>
+          <Stack
+            direction="column"
+            justifyContent="space-between"
+            alignItems="flex-start"
+            gap="20px"
+            sx={{mb: "20px"}}
+          >
             <Button
               variant="contained"
               onClick={() => history.push(`/groupDashboard/${groupId.id}`)}
             >
               Back
             </Button>
+            <Typography variant="h3">{currentGroup.name}</Typography>
           </Stack>
           <Stack direction="row" gap="40px">
             <Stack direction="column" sx={{ width: "70%" }}>

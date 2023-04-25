@@ -38,9 +38,11 @@ const BudgetCategoryTable = ({ category }) => {
     },
     {
       field: "expenseAmount",
+      type: "number",
       headerName: "Amount",
       width: 150,
       editable: true,
+      valueFormatter: ({ value }) => currencyFormatter.format(value),
     },
     {
       field: "username",
@@ -104,6 +106,11 @@ const BudgetCategoryTable = ({ category }) => {
     setEditedCategory({ name: category.name, value: category.budgetAmount });
   };
 
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   // console.log(editedCategory);
 
   return (
@@ -142,7 +149,7 @@ const BudgetCategoryTable = ({ category }) => {
               <EditIcon></EditIcon>
             </IconButton>
             <Typography variant="h6">
-              Target Budget Amount: {category.budgetAmount}
+              Target Budget Amount: {currencyFormatter.format(category.budgetAmount)}
             </Typography>
           </Stack>
         )}
@@ -156,10 +163,10 @@ const BudgetCategoryTable = ({ category }) => {
           <Typography variant="h5">{category.name}</Typography>
           {categoryTotal > category.budgetAmount ? (
             <Typography variant="h6" color="red">
-              Total Spent: {categoryTotal}
+              Total Spent: {currencyFormatter.format(categoryTotal)}
             </Typography>
           ) : (
-            <Typography variant="h6">Total Spent: {categoryTotal}</Typography>
+            <Typography variant="h6">Total Spent: {currencyFormatter.format(categoryTotal)}</Typography>
           )}
         </Stack>
       </Stack>
