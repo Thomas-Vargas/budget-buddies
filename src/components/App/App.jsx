@@ -91,6 +91,7 @@ function App() {
           mode,
           primary: {
             main: "#32174D",
+            light: "#5B4570"
           },
           secondary: {
             main: "#800000",

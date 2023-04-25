@@ -37,7 +37,7 @@ function Nav({ darkModeController }) {
     //     )} */}
     //   </div>
     <AppBar position="fixed">
-      <Toolbar>
+      <Toolbar style={{backgroundColor: "#32174D"}}>
         <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
           <Typography variant="h5" noWrap component="div">
             Budget App

@@ -103,7 +103,7 @@ const SideBar = ({ component, darkModeController }) => {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar style={{backgroundColor:"#32174D"}}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
