@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +9,13 @@ import {
   Stack,
   Typography,
   CircularProgress,
+  Modal,
+  Backdrop,
+  Fade,
+  Paper,
+  Snackbar
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import { useHistory } from "react-router-dom";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
 import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
@@ -17,6 +24,10 @@ import ActivityFeed from "../ActivityFeed/ActivtyFeed";
 
 import "./GroupDashboard.css";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const GroupDashboard = () => {
   const groupId = useParams();
   const dispatch = useDispatch();
@@ -24,6 +35,8 @@ const GroupDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [expenseFormToggle, setExpenseFormToggle] = useState(false);
   const [categoryFormToggle, setCategoryFormToggle] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [resetSuccessSnackOpen, setResetSuccessSnackOpen] = useState(false);
 
   const categories = useSelector((store) => store.categories);
   const currentGroup = useSelector((store) => store.currentGroup);
@@ -33,11 +46,32 @@ const GroupDashboard = () => {
   let totalMoneySpent = 0;
   let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setResetSuccessSnackOpen(false);
+  };
+
   if (categories[0]) {
     categories.map((category) => (totalBudgetAmount += category.budgetAmount));
   }
 
   allExpenses.map((expense) => (totalMoneySpent += expense.amount));
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    outline: "none",
+  };
 
   // store specific budget and categories in global state based on groupId from url params
   useEffect(() => {
@@ -50,11 +84,15 @@ const GroupDashboard = () => {
     dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
 
-  // console.log("New category:", newCategory);
-  // console.log("New expense:", newExpense);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   const deleteAllExpenses = () => {
     dispatch({ type: "DELETE_ALL_EXPENSES", payload: currentGroup.id });
+    handleClose();
+    setResetSuccessSnackOpen(true);
   };
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -85,7 +123,7 @@ const GroupDashboard = () => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ height: "40px", mb:"20px" }}
+            sx={{ height: "40px", mb: "20px" }}
           >
             <Typography variant="h3">{currentGroup.name}</Typography>
             <Button
@@ -160,7 +198,7 @@ const GroupDashboard = () => {
               <Stack
                 direction="row"
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems="flex-end"
                 sx={{ marginBottom: "40px" }}
               >
                 <Stack direction="column" gap="10px">
@@ -200,7 +238,8 @@ const GroupDashboard = () => {
 
                 <Button
                   variant="contained"
-                  onClick={deleteAllExpenses}
+                  // onClick={deleteAllExpenses}
+                  onClick={handleOpen}
                   style={{ backgroundColor: "#5B4570" }}
                 >
                   Reset All Expenses
@@ -230,6 +269,58 @@ const GroupDashboard = () => {
           </Stack>
         </div>
       )}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Paper sx={{ ...style, border: "none" }}>
+            <Typography id="transition-modal-title" variant="h5">
+              Are you sure?
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              This will remove all expenses from all categories.
+            </Typography>
+            <Stack
+              direction="row"
+              sx={{ mt: "20px" }}
+              justifyContent="flex-end"
+              gap="20px"
+            >
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleClose()}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#5B4570" }}
+                onClick={deleteAllExpenses}
+              >
+                Reset
+              </Button>
+            </Stack>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      <Snackbar open={resetSuccessSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+        <Alert onClose={() => setResetSuccessSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+          All expenses deleted.
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
