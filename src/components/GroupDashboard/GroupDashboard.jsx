@@ -13,14 +13,17 @@ import {
   Backdrop,
   Fade,
   Paper,
-  Snackbar
+  Snackbar,
+  IconButton,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import MuiAlert from "@mui/material/Alert";
 import { useHistory } from "react-router-dom";
 import BudgetCategoryTable from "../BudgetCategoryTable/BudgetCategoryTable";
 import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
 import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
 import ActivityFeed from "../ActivityFeed/ActivtyFeed";
+import EditGroupModal from "../EditGroupModal/EditGroupModal";
 
 import "./GroupDashboard.css";
 
@@ -37,6 +40,7 @@ const GroupDashboard = () => {
   const [categoryFormToggle, setCategoryFormToggle] = useState(false);
   const [open, setOpen] = useState(false);
   const [resetSuccessSnackOpen, setResetSuccessSnackOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   const categories = useSelector((store) => store.categories);
   const currentGroup = useSelector((store) => store.currentGroup);
@@ -84,10 +88,11 @@ const GroupDashboard = () => {
     dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleEditOpen = () => setOpenEditModal(true);
+  const handleEditClose = () => setOpenEditModal(false);
 
   const deleteAllExpenses = () => {
     dispatch({ type: "DELETE_ALL_EXPENSES", payload: currentGroup.id });
@@ -125,7 +130,12 @@ const GroupDashboard = () => {
             alignItems="center"
             sx={{ height: "40px", mb: "20px" }}
           >
-            <Typography variant="h3">{currentGroup.name}</Typography>
+            <Stack direction="row" alignItems="center" gap="5px">
+              <IconButton onClick={() => handleEditOpen()}>
+                <EditIcon></EditIcon>
+              </IconButton>
+              <Typography variant="h3">{currentGroup.name}</Typography>
+            </Stack>
             <Button
               variant="contained"
               onClick={() => history.push(`/allExpenses/${groupId.id}`)}
@@ -316,8 +326,22 @@ const GroupDashboard = () => {
         </Fade>
       </Modal>
 
-      <Snackbar open={resetSuccessSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-        <Alert onClose={() => setResetSuccessSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+      <EditGroupModal
+        openEditModal={openEditModal}
+        handleEditClose={handleEditClose}
+        handleEditOpen={handleEditOpen}
+      />
+
+      <Snackbar
+        open={resetSuccessSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={() => setResetSuccessSnackOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           All expenses deleted.
         </Alert>
       </Snackbar>
