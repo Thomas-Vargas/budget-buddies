@@ -29,6 +29,16 @@ const GroupDashboard = () => {
   const currentGroup = useSelector((store) => store.currentGroup);
   const allExpenses = useSelector((store) => store.expenses);
 
+  let totalBudgetAmount = 0;
+  let totalMoneySpent = 0;
+  let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
+
+  if (categories[0]) {
+    categories.map((category) => (totalBudgetAmount += category.budgetAmount));
+  }
+
+  allExpenses.map((expense) => (totalMoneySpent += expense.amount));
+
   // store specific budget and categories in global state based on groupId from url params
   useEffect(() => {
     currentGroup.id &&
@@ -46,6 +56,11 @@ const GroupDashboard = () => {
   const deleteAllExpenses = () => {
     dispatch({ type: "DELETE_ALL_EXPENSES", payload: currentGroup.id });
   };
+
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 
   setTimeout(() => {
     setLoading(false);
@@ -90,7 +105,7 @@ const GroupDashboard = () => {
                 gap="10px"
                 alignItems="flex-start"
                 width="100%"
-                sx={{margin: "40px 0px"}}
+                sx={{ margin: "40px 0px" }}
               >
                 {expenseFormToggle ? (
                   <div>
@@ -141,15 +156,34 @@ const GroupDashboard = () => {
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
-                sx={{marginBottom:"40px"}}
+                sx={{ marginBottom: "40px" }}
               >
-                <Typography variant="h5">
-                  Monthly Income: {Math.round(currentGroup.totalBudget / 12)}
-                </Typography>
-                <Button
-                  variant="contained"
-                  onClick={deleteAllExpenses}
-                >
+                <Stack direction="column" gap="10px">
+                  <Typography variant="h5">
+                    Monthly Income: {currencyFormatter.format(monthlyIncome)}
+                  </Typography>
+                  <Typography variant="h5">
+                    Projected Budget:{" "}
+                    {totalBudgetAmount >
+                    Math.round(currentGroup.totalBudget / 12) ? (
+                      <span style={{ color: "red" }}>{currencyFormatter.format(totalBudgetAmount)}</span>
+                    ) : (
+                       <span>{ currencyFormatter.format(totalBudgetAmount) }</span>
+                    )}
+                  </Typography>
+                  <Typography variant="h5">
+                    Money Left:{" "}
+                    {totalMoneySpent > totalBudgetAmount ? (
+                      <span style={{ color: "red" }}>
+                        {currencyFormatter.format(totalMoneySpent - totalBudgetAmount)} Over Projected Budget
+                      </span>
+                    ) : (
+                      <span>{currencyFormatter.format(totalBudgetAmount - totalMoneySpent)} left</span>
+                    )}
+                  </Typography>
+                </Stack>
+
+                <Button variant="contained" onClick={deleteAllExpenses}>
                   Reset All Expenses
                 </Button>
               </Stack>
