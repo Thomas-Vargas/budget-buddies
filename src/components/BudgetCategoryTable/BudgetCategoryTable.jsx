@@ -1,3 +1,4 @@
+import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -8,7 +9,12 @@ import {
   IconButton,
   TextField,
   Paper,
+  Modal,
+  Fade,
+  Backdrop,
+  Snackbar,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { useState } from "react";
@@ -16,10 +22,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./BudgetCategoryTable.css";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const BudgetCategoryTable = ({ category }) => {
   const [selections, setSelections] = useState([]);
   const [editedCategory, setEditedCategory] = useState({ name: "", value: "" });
   const [editToggle, setEditToggle] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [cellDeleteSuccessSnackOpen, setCellDeleteSuccessSnackOpen] = useState(false);
+  const [categoryDeleteSnackOpen, setCategoryDeleteSnackOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const dispatch = useDispatch();
 
@@ -27,6 +43,19 @@ const BudgetCategoryTable = ({ category }) => {
 
   let categoryTotal = 0;
   category.expenses.map((expense) => (categoryTotal += expense.expenseAmount));
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    outline: "none",
+  };
 
   const columns = [
     {
@@ -39,7 +68,6 @@ const BudgetCategoryTable = ({ category }) => {
       field: "expenseAmount",
       type: "number",
       headerName: "Amount",
-      width: 150,
       editable: true,
       valueFormatter: ({ value }) => currencyFormatter.format(value),
     },
@@ -47,7 +75,6 @@ const BudgetCategoryTable = ({ category }) => {
       field: "username",
       headerName: "User",
       type: "number",
-      width: 110,
       editable: false,
     },
   ];
@@ -59,6 +86,7 @@ const BudgetCategoryTable = ({ category }) => {
       type: "DELETE_EXPENSE",
       payload: { expenseIds: selections, budgetId: currentGroup.id },
     });
+    setCellDeleteSuccessSnackOpen(true);
   };
 
   const handleCellEditCommit = (params) => {
@@ -77,11 +105,13 @@ const BudgetCategoryTable = ({ category }) => {
   };
 
   const deleteCategory = () => {
+    handleClose();
     const deleteCategoryObj = {
       budgetId: currentGroup.id,
       categoryId: category.id,
     };
     dispatch({ type: "DELETE_CATEGORY", payload: deleteCategoryObj });
+    setCategoryDeleteSnackOpen(true);
   };
 
   const handleEditSave = () => {
@@ -110,11 +140,18 @@ const BudgetCategoryTable = ({ category }) => {
     currency: "USD",
   });
 
-  // console.log(editedCategory);
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setCategoryDeleteSnackOpen(false);
+    setCellDeleteSuccessSnackOpen(false);
+  };
 
   return (
     <Grid item xs={6}>
-      <Paper elevation={6} sx={{padding: "20px"}}>
+      <Paper elevation={6} sx={{ padding: "20px" }}>
         <Stack direction="column" gap="10px">
           {editToggle ? (
             <Stack direction="row" justifyContent="space-between">
@@ -139,7 +176,11 @@ const BudgetCategoryTable = ({ category }) => {
                   })
                 }
               />
-              <Button variant="contained" onClick={() => handleEditSave()}>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#5B4570" }}
+                onClick={() => handleEditSave()}
+              >
                 Save
               </Button>
             </Stack>
@@ -195,11 +236,7 @@ const BudgetCategoryTable = ({ category }) => {
             onCellEditCommit={(params) => handleCellEditCommit(params)}
           />
         </Box>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          sx={{ marginBottom: "20px" }}
-        >
+        <Stack direction="row" justifyContent="space-between">
           {selections[0] && (
             <Button variant="contained" onClick={handleDelete} color="error">
               Delete
@@ -211,12 +248,66 @@ const BudgetCategoryTable = ({ category }) => {
             justifyContent="flex-end"
             sx={{ width: "100%" }}
           >
-            <Button variant="contained" onClick={deleteCategory} color="error">
+            <Button variant="contained" onClick={handleOpen} color="error">
               Delete Category
             </Button>
           </Stack>
         </Stack>
       </Paper>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Paper sx={{ ...style, border: "none" }}>
+            <Typography id="transition-modal-title" variant="h5">
+              Are you sure?
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              This will remove the entire budget category, including all
+              expenses in the category.
+            </Typography>
+            <Stack
+              direction="row"
+              sx={{ mt: "20px" }}
+              justifyContent="flex-end"
+              gap="20px"
+            >
+              <Button variant="contained" color="error" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#5B4570" }}
+                onClick={deleteCategory}
+              >
+                Delete
+              </Button>
+            </Stack>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      <Snackbar open={cellDeleteSuccessSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+        <Alert onClose={() => setCellDeleteSuccessSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+          Expenses deleted.
+        </Alert>
+      </Snackbar>
+      <Snackbar open={categoryDeleteSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
+        <Alert onClose={() => setCategoryDeleteSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+          Category Deleted!
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };
