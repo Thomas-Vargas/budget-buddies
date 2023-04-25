@@ -46,6 +46,10 @@ const GroupDashboard = () => {
   const currentGroup = useSelector((store) => store.currentGroup);
   const allExpenses = useSelector((store) => store.expenses);
 
+  let date = new Date();
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  let todaysDate = date.toLocaleDateString("en-US", options);
+
   let totalBudgetAmount = 0;
   let totalMoneySpent = 0;
   let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
@@ -144,6 +148,7 @@ const GroupDashboard = () => {
               All Expenses
             </Button>
           </Stack>
+          <Typography variant="h6">{todaysDate}</Typography>
           <Stack direction="row" gap="40px">
             <Stack direction="column" width="80%">
               {/* Display monthly income before tax */}

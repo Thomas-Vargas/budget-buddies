@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Stack, Button, Box, Typography } from "@mui/material";
+import { Grid, Stack, Button, Box, Typography, Paper } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,17 @@ const AllExpensesTable = () => {
 
   const currentGroup = useSelector((store) => store.currentGroup);
   const allExpenses = useSelector((store) => store.expenses);
+  const categories = useSelector(store => store.categories);
+
+  let totalBudgetAmount = 0;
+  let totalMoneySpent = 0;
+  let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
+
+  if (categories[0]) {
+    categories.map((category) => (totalBudgetAmount += category.budgetAmount));
+  }
+
+  allExpenses.map((expense) => (totalMoneySpent += expense.amount));
 
   useEffect(() => {
     currentGroup.id &&
@@ -87,34 +98,64 @@ const AllExpensesTable = () => {
           justifyContent="space-between"
           sx={{ mb: "20px" }}
         >
-          <Typography variant="h5">
-            Monthly Income:{" "}
-            {currencyFormatter.format(
-              Math.round(currentGroup.totalBudget / 12)
-            )}
-          </Typography>
+          <Stack direction="column" gap="10px">
+            <Typography variant="h5">
+              Monthly Income: {currencyFormatter.format(monthlyIncome)}
+            </Typography>
+            <Typography variant="h5">
+              Projected Budget:{" "}
+              {totalBudgetAmount > Math.round(currentGroup.totalBudget / 12) ? (
+                <span style={{ color: "red" }}>
+                  {currencyFormatter.format(totalBudgetAmount)}
+                </span>
+              ) : (
+                <span>{currencyFormatter.format(totalBudgetAmount)}</span>
+              )}
+            </Typography>
+            <Typography variant="h5">
+              Money Left:{" "}
+              {totalMoneySpent > totalBudgetAmount ? (
+                <span style={{ color: "red" }}>
+                  {currencyFormatter.format(
+                    totalMoneySpent - totalBudgetAmount
+                  )}{" "}
+                  Over Projected Budget
+                </span>
+              ) : (
+                <span>
+                  {currencyFormatter.format(
+                    totalBudgetAmount - totalMoneySpent
+                  )}{" "}
+                  left
+                </span>
+              )}
+            </Typography>
+          </Stack>
         </Stack>
-        <Box
+        <Paper
           sx={{
-            height: "900px",
+            height: "700px",
             width: "100%",
             marginBottom: "20px",
             "& .font-tabular-nums": {
               fontVariantNumeric: "tabular-nums",
             },
           }}
+
+          elevation={6}
         >
           <DataGrid
             rows={rows}
             columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
+            // initialState={{
+            //   pagination: {
+            //     paginationModel: {
+            //       pageSize: 5,
+            //     },
+            //   },
+            // }}
+            // pageSizeOptions={[5]}
+            autoPageSize
             checkboxSelection
             disableRowSelectionOnClick
             onSelectionModelChange={(newSelection) => {
@@ -122,7 +163,7 @@ const AllExpensesTable = () => {
             }}
             onCellEditCommit={(params) => handleCellEditCommit(params)}
           />
-        </Box>
+        </Paper>
         <Stack direction="row" justifyContent="space-between">
           {selections[0] && (
             <Button variant="contained" onClick={handleDelete} color="error">

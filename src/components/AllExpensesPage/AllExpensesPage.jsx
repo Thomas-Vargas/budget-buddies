@@ -15,6 +15,10 @@ const AllExpensesPage = () => {
 
   const categoryTotals = useSelector((store) => store.categoryTotals);
 
+  let date = new Date();
+  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  let todaysDate = date.toLocaleDateString("en-US", options);
+
   setTimeout(() => {
     setLoading(false);
   }, 1500);
@@ -37,7 +41,6 @@ const AllExpensesPage = () => {
             justifyContent="space-between"
             alignItems="flex-start"
             gap="20px"
-            sx={{mb: "20px"}}
           >
             <Button
               variant="contained"
@@ -48,6 +51,8 @@ const AllExpensesPage = () => {
             </Button>
             <Typography variant="h3">{currentGroup.name}</Typography>
           </Stack>
+          <Typography variant="h6" mb="20px">{todaysDate}</Typography>
+
           <Stack direction="row" gap="40px">
             <Stack direction="column" sx={{ width: "70%" }}>
               <AllExpensesTable />
