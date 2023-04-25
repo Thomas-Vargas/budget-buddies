@@ -30,7 +30,7 @@ router.get("/currentGroup/:id", rejectUnauthenticated, (req, res) => {
 });
 
 // GET route
-router.get("/user/:username", (req, res) => {
+router.get("/user/:username", rejectUnauthenticated, (req, res) => {
   const username = req.params.username;
   const sqlText = `SELECT * FROM "user" WHERE "username" = $1`;
   // console.log('req.params.username:' , username);
@@ -71,7 +71,7 @@ router.get("/userGroups", rejectUnauthenticated, (req, res) => {
  * POST route template
  */
 //create budget
-router.post("/createBudget", (req, res) => {
+router.post("/createBudget", rejectUnauthenticated, (req, res) => {
   const newBudget = req.body;
   console.log(req.body);
   const queryText = `INSERT INTO "budget" ("totalBudget")
@@ -90,7 +90,7 @@ router.post("/createBudget", (req, res) => {
 });
 
 //create group
-router.post("/createGroup", (req, res) => {
+router.post("/createGroup", rejectUnauthenticated, (req, res) => {
   const newGroup = req.body;
   const queryText = `INSERT INTO "groups" ("name", "budgetId")
   VALUES ($1, $2) RETURNING "id"`;
@@ -107,7 +107,7 @@ router.post("/createGroup", (req, res) => {
 });
 
 //create user_group
-router.post("/createUserGroup", (req, res) => {
+router.post("/createUserGroup", rejectUnauthenticated, (req, res) => {
   const queryText = `INSERT INTO "user_groups" ("userId", "groupsId")
   VALUES  ($2, $1), ($3, $1);`;
 
@@ -124,7 +124,7 @@ router.post("/createUserGroup", (req, res) => {
     });
 });
 
-router.post("/createCategories", (req, res) => {
+router.post("/createCategories", rejectUnauthenticated, (req, res) => {
   let category = req.body.category;
   let budgetId = req.body.id;
   const queryText = `INSERT INTO "categories" ("name", "budgetAmount", "budgetId")
@@ -141,7 +141,7 @@ router.post("/createCategories", (req, res) => {
     });
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", rejectUnauthenticated, (req, res) => {
   console.log(req.body)
   let editedGroup = req.body;
   let groupId = req.body.id;

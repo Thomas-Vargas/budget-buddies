@@ -1,11 +1,14 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
 /**
  * GET route template
  */
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectUnauthenticated, (req, res) => {
   const budgetId = req.params.id;
 
   const sqlText = `
@@ -41,7 +44,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/categoryTotals/:id", (req, res) => {
+router.get("/categoryTotals/:id", rejectUnauthenticated, (req, res) => {
   const budgetId = req.params.id;
 
   const sqlText = `
@@ -65,7 +68,7 @@ router.get("/categoryTotals/:id", (req, res) => {
 /**
  * POST route template
  */
-router.post("/", (req, res) => {
+router.post("/", rejectUnauthenticated, (req, res) => {
   const newCategory = req.body;
   console.log(newCategory);
   const sqlText = `INSERT INTO "categories" ("name", "budgetAmount", "budgetId")
@@ -86,7 +89,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", rejectUnauthenticated, (req, res) => {
   const idToDelete = req.params.id;
 
   const sqlText = `
@@ -104,7 +107,7 @@ router.delete("/delete/:id", (req, res) => {
     });
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", rejectUnauthenticated, (req, res) => {
   const idToUpdate = req.params.id;
   const category = req.body;
   const sqlText= `

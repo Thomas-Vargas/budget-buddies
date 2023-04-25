@@ -47,7 +47,7 @@ router.post("/logout", (req, res) => {
   res.sendStatus(200);
 });
 
-router.get("/allUsers", (req, res) => {
+router.get("/allUsers", rejectUnauthenticated, (req, res) => {
   const sqlText = `SELECT "user".username FROM "user"`;
 
   pool
@@ -61,7 +61,7 @@ router.get("/allUsers", (req, res) => {
     });
 });
 
-router.put("/updateUser", (req, res) => {
+router.put("/updateUser", rejectUnauthenticated, (req, res) => {
   const userInfo = req.body;
   const userId = req.user.id;
   const password = encryptLib.encryptPassword(userInfo.password);

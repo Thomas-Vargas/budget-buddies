@@ -1,11 +1,14 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
 /**
  * POST route template
  */
-router.post("/", (req, res) => {
+router.post("/", rejectUnauthenticated, (req, res) => {
   const newExpense = req.body;
   const userId = req.user.id;
   const sqlText = `
@@ -31,7 +34,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.delete("/deleteAll/:id", (req, res) => {
+router.delete("/deleteAll/:id", rejectUnauthenticated, (req, res) => {
   const budgetId = req.params.id;
 
   const sqlText = `
@@ -50,7 +53,7 @@ router.delete("/deleteAll/:id", (req, res) => {
 });
 
 // delete request using post to have access to req.body
-router.post("/delete", (req, res) => {
+router.post("/delete", rejectUnauthenticated, (req, res) => {
   // console.log('req.body:',req.body);
 
   // dynamically generate sql text depending on number of ids in req.body
@@ -71,7 +74,7 @@ router.post("/delete", (req, res) => {
     });
 });
 
-router.delete("/deleteByCategory/:id", (req, res) => {
+router.delete("/deleteByCategory/:id", rejectUnauthenticated, (req, res) => {
   const idToDelete = req.params.id;
 
   const sqlText = `
@@ -89,7 +92,7 @@ router.delete("/deleteByCategory/:id", (req, res) => {
     });
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", rejectUnauthenticated, (req, res) => {
   const expenseToUpdate = req.body;
   console.log("Req.body as expenseToUpdate", expenseToUpdate);
   let sqlText = ``;
@@ -119,7 +122,7 @@ router.put("/update/:id", (req, res) => {
     });
 });
 
-router.get("/allGroupExpenses/:id", (req, res) => {
+router.get("/allGroupExpenses/:id", rejectUnauthenticated, (req, res) => {
   const budgetId = req.params.id;
   const sqlText = ` 
     SELECT "expenses".id, "expenses".name AS "expenseName", "expenses".amount, "categories".name AS "categoryName", 

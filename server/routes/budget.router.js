@@ -1,11 +1,14 @@
 const express = require("express");
 const pool = require("../modules/pool");
 const router = express.Router();
+const {
+  rejectUnauthenticated,
+} = require("../modules/authentication-middleware");
 
 /**
  * GET route template
  */
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectUnauthenticated, (req, res) => {
   const groupId = req.params.id;
   const sqlText = `
     SELECT "categories".name AS "categoryName", "categories"."budgetAmount" FROM "budget"
@@ -25,7 +28,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/update/:id", (req, res) => {
+router.put("/update/:id", rejectUnauthenticated, (req, res) => {
   const updatedBudget = req.body
   const budgetId = req.params.id;
   const sqlText = `
