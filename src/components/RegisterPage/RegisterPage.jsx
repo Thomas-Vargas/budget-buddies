@@ -16,6 +16,7 @@ function RegisterPage() {
             history.push("/login");
           }}
           variant="contained"
+          style={{ backgroundColor: "#5B4570" }}
         >
           Login
         </Button>

@@ -27,7 +27,7 @@ function LoginForm() {
 
   return (
     <Stack direction="row" justifyContent="center">
-      <Paper sx={{padding: "60px", marginBottom: "20px"}} elevation={6} >
+      <Paper sx={{ padding: "60px", marginBottom: "20px" }} elevation={6}>
         <form onSubmit={login}>
           <Typography variant="h4" sx={{ marginBottom: "20px" }}>
             Login
@@ -39,7 +39,7 @@ function LoginForm() {
           )}
           <div className="form-inputs">
             <div>
-              <TextField  
+              <TextField
                 type="text"
                 name="username"
                 label="Username"
@@ -61,7 +61,12 @@ function LoginForm() {
               />
             </div>
             <div>
-              <Button type="submit" variant="contained" name="submit">
+              <Button
+                type="submit"
+                variant="contained"
+                name="submit"
+                style={{ backgroundColor: "#5B4570" }}
+              >
                 Log In
               </Button>
             </div>

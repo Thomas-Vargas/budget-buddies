@@ -36,8 +36,7 @@ const AddCategoryForm = ({ groupId, budgetId }) => {
         },
       });
       setNewCategory({ name: "", amount: "" });
-    }
-    else {
+    } else {
       setErrorSnackOpen(true);
     }
   };
@@ -64,17 +63,33 @@ const AddCategoryForm = ({ groupId, budgetId }) => {
             setNewCategory({ ...newCategory, amount: e.target.value })
           }
         />
-        <Button variant="contained" onClick={addNewCategory}>
+        <Button
+          variant="contained"
+          onClick={addNewCategory}
+          style={{ backgroundColor: "#5B4570" }}
+        >
           Add Category
         </Button>
       </Stack>
 
-      <Snackbar open={errorSnackOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={() => setErrorSnackOpen(false)} severity="error" sx={{ width: "100%" }}>
-        Must provide category name and budget amount.
+      <Snackbar
+        open={errorSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setErrorSnackOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Must provide category name and budget amount.
         </Alert>
       </Snackbar>
-      <Snackbar open={successSnackOpen} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        open={successSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
           Category Created!
         </Alert>

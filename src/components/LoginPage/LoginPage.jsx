@@ -1,21 +1,22 @@
-import React from 'react';
-import LoginForm from '../LoginForm/LoginForm';
-import { useHistory } from 'react-router-dom';
-import { Button } from '@mui/material';
+import React from "react";
+import LoginForm from "../LoginForm/LoginForm";
+import { useHistory } from "react-router-dom";
+import { Button } from "@mui/material";
 
 function LoginPage() {
   const history = useHistory();
 
   return (
-    <div className='wrapper-top-margin'>
+    <div className="wrapper-top-margin">
       <LoginForm />
 
       <center>
         <Button
-          variant='contained'
+          variant="contained"
           onClick={() => {
-            history.push('/registration');
+            history.push("/registration");
           }}
+          style={{ backgroundColor: "#5B4570" }}
         >
           Register
         </Button>

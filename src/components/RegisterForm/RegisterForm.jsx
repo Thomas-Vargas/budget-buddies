@@ -22,7 +22,7 @@ function RegisterForm() {
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center">
-      <Paper elevation={6} sx={{padding: "40px", marginBottom: "20px"}} >
+      <Paper elevation={6} sx={{ padding: "40px", marginBottom: "20px" }}>
         <form onSubmit={registerUser}>
           <Typography variant="h5">Register User</Typography>
           {errors.registrationMessage && (
@@ -58,8 +58,8 @@ function RegisterForm() {
             name="submit"
             value="register"
             variant="contained"
+            style={{ backgroundColor: "#5B4570" }}
           >
-            {" "}
             Register
           </Button>
         </form>
