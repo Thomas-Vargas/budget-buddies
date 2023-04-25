@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Modal,
   Paper,
@@ -7,9 +8,15 @@ import {
   Backdrop,
   Fade,
   TextField,
+  Snackbar
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // Base: edit name and income
 // Stretch: add/remove users, delete group
@@ -19,6 +26,18 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
     income1: "",
     income2: "",
   });
+  const [snackSuccessOpen, setSnackSuccessOpen] = useState(false);
+  const [snackFailureOpen, setSnackFailureOpen] = useState(false);
+
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackSuccessOpen(false);
+    setSnackFailureOpen(false);
+  };
   console.log(editedGroupInfo);
 
   const dispatch = useDispatch();
@@ -66,9 +85,11 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
         income1: "",
         income2: "",
       });
+      
       handleEditClose();
+      setSnackSuccessOpen(true);
     } else {
-      alert("nope")
+      setSnackFailureOpen(true);
     }
   };
 
@@ -98,6 +119,7 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
                 type="text"
                 label="Group Name"
                 variant="outlined"
+                required
                 value={editedGroupInfo.name}
                 onChange={(e) =>
                   setEditedGroupInfo({
@@ -112,6 +134,7 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
                   type="number"
                   label="Income"
                   variant="outlined"
+                  required
                   value={editedGroupInfo.income1}
                   onChange={(e) =>
                     setEditedGroupInfo({
@@ -159,6 +182,29 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
           </Paper>
         </Fade>
       </Modal>
+
+      <Snackbar
+        open={snackFailureOpen}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={() => setSnackFailureOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Missing required fields.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={snackSuccessOpen}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert onClose={() => setSnackFailureOpen(false)} severity="success" sx={{ width: "100%" }}>
+          Group info updated!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
