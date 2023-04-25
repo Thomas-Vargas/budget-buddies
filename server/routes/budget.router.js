@@ -25,11 +25,24 @@ router.get("/:id", (req, res) => {
     });
 });
 
-/**
- * POST route template
- */
-router.post("/", (req, res) => {
-  // POST route code here
+router.put("/update/:id", (req, res) => {
+  const updatedBudget = req.body
+  const budgetId = req.params.id;
+  const sqlText = `
+    UPDATE "budget"
+    SET "totalBudget" = $1
+    WHERE "id" = $2;
+  `;
+
+  pool
+    .query(sqlText, [updatedBudget.totalBudget, budgetId])
+    .then((result) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("Failed to updated totalBudget:", err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;

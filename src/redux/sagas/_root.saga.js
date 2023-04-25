@@ -3,7 +3,7 @@ import loginSaga from './login.saga';
 import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import groupSaga from './group.saga';
-// import budgetSaga from './budget.saga';
+import budgetSaga from './budget.saga';
 import categorySaga from './category.saga';
 import expenseSaga from './expense.saga';
 
@@ -21,6 +21,7 @@ export default function* rootSaga() {
     userSaga(),
     groupSaga(),
     categorySaga(),
-    expenseSaga()
+    expenseSaga(),
+    budgetSaga()
   ]);
 }
