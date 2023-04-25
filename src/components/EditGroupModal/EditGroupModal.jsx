@@ -25,10 +25,6 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
 
   const currentGroup = useSelector((store) => store.currentGroup);
 
-  useEffect(() => {
-    setEditedGroupInfo({...editedGroupInfo, name:  currentGroup.name})
-  }, []);
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -41,6 +37,18 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
     p: 4,
     outline: "none",
   };
+
+  const saveGroupChanges = () => {
+    // update "groups".name, need "groups".id -> currentGroup.groupId
+    dispatch({ type: "UPDATE_GROUP_NAME", payload: {...editedGroupInfo, id: currentGroup.groupId}});
+    // update "budget".totalBudget, need "budget".id
+    handleEditClose();
+  }
+
+  useEffect(() => {
+    setEditedGroupInfo({...editedGroupInfo, name:  currentGroup.name})
+  }, []);
+
 
   return (
     <div>
@@ -112,6 +120,7 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
               <Button
                 variant="contained"
                 style={{ backgroundColor: "#5B4570" }}
+                onClick={saveGroupChanges}
               >
                 Save
               </Button>

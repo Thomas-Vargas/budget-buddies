@@ -53,7 +53,7 @@ function* createCategories(action) {
 
 function* fetchCurrentGroup(action) {
   try {
-    console.log('payload in fetchCurrentGroup',action.payload)
+    console.log('payload in fetchCurrentGroup', action.payload)
     const response = yield axios.get(`/api/group/currentGroup/${action.payload.id}`);
     console.log(response.data);
     yield put({ type: 'SET_CURRENT_GROUP', payload: response.data[0] });
@@ -73,6 +73,15 @@ function* fetchAllGroups(action) {
   }
 }
 
+function* updateGroupName(action) {
+  try {
+    yield axios.put(`/api/group/update/${action.payload.id}`, action.payload);
+    yield put({type: 'FETCH_CURRENT_GROUP', payload: action.payload});
+  } catch (error) {
+    console.log('failure in updateGroupName saga', error);
+  }
+}
+
 function* groupSaga() {
   // budget -> groups -> user_group -> categories
   yield takeLatest('CREATE_GROUP', createBudget);
@@ -81,6 +90,7 @@ function* groupSaga() {
   yield takeLatest('CREATE_CATEGORIES', createCategories);
   yield takeLatest('FETCH_CURRENT_GROUP', fetchCurrentGroup);
   yield takeLatest('FETCH_ALL_GROUPS', fetchAllGroups);
+  yield takeLatest('UPDATE_GROUP_NAME', updateGroupName);
 }
 
 export default groupSaga

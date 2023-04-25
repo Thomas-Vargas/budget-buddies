@@ -141,4 +141,25 @@ router.post("/createCategories", (req, res) => {
     });
 });
 
+router.put("/update/:id", (req, res) => {
+  console.log(req.body)
+  let editedGroup = req.body;
+  let groupId = req.body.id;
+  const queryText = `
+    UPDATE "groups"
+    SET "name" = $1
+    WHERE "id" = $2;
+  `;
+
+  pool
+    .query(queryText, [editedGroup.name, groupId])
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log("Failed to update group name: ", err);
+      res.sendStatus(500);
+    });
+})
+
 module.exports = router;
