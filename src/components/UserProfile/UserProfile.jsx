@@ -7,6 +7,8 @@ import {
   TextField,
   Snackbar,
   Button,
+  Paper,
+  Typography
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
@@ -36,8 +38,8 @@ const UserProfile = () => {
   const allGroups = useSelector((store) => store.groups);
 
   useEffect(() => {
-    allUsers[0] && setAllUsersState(allUsers)
-  }, [allUsers])
+    allUsers[0] && setAllUsersState(allUsers);
+  }, [allUsers]);
 
   const dispatch = useDispatch();
 
@@ -73,7 +75,7 @@ const UserProfile = () => {
   const saveUpdatedUserDetails = () => {
     let uniqueUsername = true; // Set to true by default
     for (let user of allUsersState) {
-      console.log('user',user.username);
+      console.log("user", user.username);
       if (
         user.username === updatedUserInfo.username &&
         updatedUserInfo.username !== currentUser.username
@@ -111,8 +113,13 @@ const UserProfile = () => {
 
   return (
     <div className="main-wrapper">
-      <Stack direction="row" justifyContent="center" alignItems="center">
-        <Stack direction="column" alignItems="center" sx={{ width: "50%" }}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        gap="40px"
+      >
+        <Paper elevation={6}>
           <Stack
             direction="row"
             justifyContent="flex-end"
@@ -122,26 +129,34 @@ const UserProfile = () => {
               <EditIcon />
             </IconButton>
           </Stack>
-          <Avatar sx={{ height: 250, width: 250 }}>
-            {currentUser.username[0]}
-          </Avatar>
-          <h1>{currentUser.username}</h1>
-          <Box>
-            <h2>{currentUser.username}'s Groups</h2>
-            {allGroups[0] &&
-              allGroups.map((group) => <p key={group.name}>{group.name}</p>)}
-          </Box>
-        </Stack>
+          <Stack
+            direction="column"
+            alignItems="center"
+            sx={{ width: "100%", padding: "50px" }}
+            gap="10px"
+          >
+            <Avatar sx={{ height: 250, width: 250 }}>
+              {currentUser.username[0]}
+            </Avatar>
+            <Typography variant="h3">{currentUser.username}</Typography>
+            <Stack gap="10px">
+              <Typography variant="h4">{currentUser.username}'s Groups</Typography>
+              {allGroups[0] &&
+                allGroups.map((group) => <Typography key={group.name}>{group.name}</Typography>)}
+            </Stack>
+          </Stack>
+        </Paper>
 
         {toggleEditForm ? (
-          <div>
+          <Paper elevation={6}>
             <Stack
               direction="column"
               alignItems="center"
               sx={{ width: "100%" }}
               gap="20px"
+              padding="50px"
             >
-              <h3>Edit Profile</h3>
+              <Typography variant="h5">Edit Profile</Typography>
               <TextField
                 type="text"
                 label="New Username"
@@ -163,11 +178,15 @@ const UserProfile = () => {
                 value={updatedUserInfo.verifyPassword}
                 onChange={(e) => handlePasswordChange("verifyPassword", e)}
               />
-              <Button variant="contained" onClick={saveUpdatedUserDetails}>
+              <Button
+                variant="contained"
+                onClick={saveUpdatedUserDetails}
+                style={{ backgroundColor: "#5B4570" }}
+              >
                 Save
               </Button>
             </Stack>
-          </div>
+          </Paper>
         ) : (
           <></>
         )}
