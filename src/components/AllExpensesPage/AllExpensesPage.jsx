@@ -42,6 +42,7 @@ const AllExpensesPage = () => {
             <Button
               variant="contained"
               onClick={() => history.push(`/groupDashboard/${groupId.id}`)}
+              style={{ backgroundColor: "#5B4570" }}
             >
               Back
             </Button>

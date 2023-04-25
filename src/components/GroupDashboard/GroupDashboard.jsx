@@ -85,12 +85,13 @@ const GroupDashboard = () => {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            sx={{ height: "40px" }}
+            sx={{ height: "40px", mb:"20px" }}
           >
-            <Typography variant="h4">{currentGroup.name}</Typography>
+            <Typography variant="h3">{currentGroup.name}</Typography>
             <Button
               variant="contained"
               onClick={() => history.push(`/allExpenses/${groupId.id}`)}
+              style={{ backgroundColor: "#5B4570" }}
             >
               All Expenses
             </Button>
@@ -105,7 +106,7 @@ const GroupDashboard = () => {
                 gap="10px"
                 alignItems="flex-start"
                 width="100%"
-                sx={{ margin: "40px 0px" }}
+                sx={{ margin: "20px 0px" }}
               >
                 {expenseFormToggle ? (
                   <div>
@@ -116,6 +117,7 @@ const GroupDashboard = () => {
                     <Button
                       variant="contained"
                       onClick={() => setExpenseFormToggle(false)}
+                      style={{ backgroundColor: "#5B4570" }}
                     >
                       Close Form
                     </Button>
@@ -124,6 +126,7 @@ const GroupDashboard = () => {
                   <Button
                     variant="contained"
                     onClick={() => setExpenseFormToggle(true)}
+                    style={{ backgroundColor: "#5B4570" }}
                   >
                     Add Expenses
                   </Button>
@@ -138,6 +141,7 @@ const GroupDashboard = () => {
                     <Button
                       variant="contained"
                       onClick={() => setCategoryFormToggle(false)}
+                      style={{ backgroundColor: "#5B4570" }}
                     >
                       Close Form
                     </Button>
@@ -146,6 +150,7 @@ const GroupDashboard = () => {
                   <Button
                     variant="contained"
                     onClick={() => setCategoryFormToggle(true)}
+                    style={{ backgroundColor: "#5B4570" }}
                   >
                     Add Category
                   </Button>
@@ -166,24 +171,38 @@ const GroupDashboard = () => {
                     Projected Budget:{" "}
                     {totalBudgetAmount >
                     Math.round(currentGroup.totalBudget / 12) ? (
-                      <span style={{ color: "red" }}>{currencyFormatter.format(totalBudgetAmount)}</span>
+                      <span style={{ color: "red" }}>
+                        {currencyFormatter.format(totalBudgetAmount)}
+                      </span>
                     ) : (
-                       <span>{ currencyFormatter.format(totalBudgetAmount) }</span>
+                      <span>{currencyFormatter.format(totalBudgetAmount)}</span>
                     )}
                   </Typography>
                   <Typography variant="h5">
                     Money Left:{" "}
                     {totalMoneySpent > totalBudgetAmount ? (
                       <span style={{ color: "red" }}>
-                        {currencyFormatter.format(totalMoneySpent - totalBudgetAmount)} Over Projected Budget
+                        {currencyFormatter.format(
+                          totalMoneySpent - totalBudgetAmount
+                        )}{" "}
+                        Over Projected Budget
                       </span>
                     ) : (
-                      <span>{currencyFormatter.format(totalBudgetAmount - totalMoneySpent)} left</span>
+                      <span>
+                        {currencyFormatter.format(
+                          totalBudgetAmount - totalMoneySpent
+                        )}{" "}
+                        left
+                      </span>
                     )}
                   </Typography>
                 </Stack>
 
-                <Button variant="contained" onClick={deleteAllExpenses}>
+                <Button
+                  variant="contained"
+                  onClick={deleteAllExpenses}
+                  style={{ backgroundColor: "#5B4570" }}
+                >
                   Reset All Expenses
                 </Button>
               </Stack>
@@ -191,7 +210,7 @@ const GroupDashboard = () => {
               <Box>
                 <Grid
                   container
-                  rowSpacing={1}
+                  spacing={3}
                   columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 >
                   {categories[0] ? (

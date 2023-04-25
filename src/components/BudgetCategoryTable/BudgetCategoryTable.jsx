@@ -7,6 +7,7 @@ import {
   Typography,
   IconButton,
   TextField,
+  Paper,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -14,8 +15,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./BudgetCategoryTable.css";
-import categoryTotals from "../../redux/reducers/categoryTotals.reducer";
-import expenses from "../../redux/reducers/expenses.reducer";
 
 const BudgetCategoryTable = ({ category }) => {
   const [selections, setSelections] = useState([]);
@@ -115,100 +114,109 @@ const BudgetCategoryTable = ({ category }) => {
 
   return (
     <Grid item xs={6}>
-      <Stack direction="column" gap="10px">
-        {editToggle ? (
-          <Stack direction="row" justifyContent="space-between">
-            <TextField
-              type="text"
-              label="Category Name"
-              variant="outlined"
-              value={editedCategory.name}
-              onChange={(e) =>
-                setEditedCategory({ ...editedCategory, name: e.target.value })
-              }
-            />
-            <TextField
-              type="number"
-              label="Category Value"
-              variant="outlined"
-              value={editedCategory.value}
-              onChange={(e) =>
-                setEditedCategory({
-                  ...editedCategory,
-                  value: e.target.value,
-                })
-              }
-            />
-            <Button variant="contained" onClick={() => handleEditSave()}>
-              Save
-            </Button>
-          </Stack>
-        ) : (
-          <Stack direction="row" justifyContent="space-between">
-            <IconButton onClick={() => handleEditClick()}>
-              <EditIcon></EditIcon>
-            </IconButton>
-            <Typography variant="h6">
-              Target Budget Amount: {currencyFormatter.format(category.budgetAmount)}
-            </Typography>
-          </Stack>
-        )}
+      <Paper elevation={6} sx={{padding: "20px"}}>
+        <Stack direction="column" gap="10px">
+          {editToggle ? (
+            <Stack direction="row" justifyContent="space-between">
+              <TextField
+                type="text"
+                label="Category Name"
+                variant="outlined"
+                value={editedCategory.name}
+                onChange={(e) =>
+                  setEditedCategory({ ...editedCategory, name: e.target.value })
+                }
+              />
+              <TextField
+                type="number"
+                label="Category Value"
+                variant="outlined"
+                value={editedCategory.value}
+                onChange={(e) =>
+                  setEditedCategory({
+                    ...editedCategory,
+                    value: e.target.value,
+                  })
+                }
+              />
+              <Button variant="contained" onClick={() => handleEditSave()}>
+                Save
+              </Button>
+            </Stack>
+          ) : (
+            <Stack direction="row" justifyContent="space-between">
+              <IconButton onClick={() => handleEditClick()}>
+                <EditIcon></EditIcon>
+              </IconButton>
+              <Typography variant="h6">
+                Target Budget Amount:{" "}
+                {currencyFormatter.format(category.budgetAmount)}
+              </Typography>
+            </Stack>
+          )}
 
+          <Stack
+            direction="row"
+            width="100%"
+            justifyContent="space-between"
+            marginBottom="10px"
+          >
+            <Typography variant="h5">{category.name}</Typography>
+            {categoryTotal > category.budgetAmount ? (
+              <Typography variant="h6" color="red">
+                Total Spent: {currencyFormatter.format(categoryTotal)}
+              </Typography>
+            ) : (
+              <Typography variant="h6">
+                Total Spent: {currencyFormatter.format(categoryTotal)}
+              </Typography>
+            )}
+          </Stack>
+        </Stack>
+
+        <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            // initialState={{
+            //   pagination: {
+            //     paginationModel: {
+            //       pageSize: 5,
+            //     },
+            //   },
+            // }}
+            // pageSizeOptions={[5]}
+            autoPageSize
+            checkboxSelection
+            disableRowSelectionOnClick
+            onSelectionModelChange={(newSelection) => {
+              setSelections(newSelection);
+            }}
+            onCellEditCommit={(params) => handleCellEditCommit(params)}
+          />
+        </Box>
         <Stack
           direction="row"
-          width="100%"
           justifyContent="space-between"
-          marginBottom="10px"
+          sx={{ marginBottom: "20px" }}
         >
-          <Typography variant="h5">{category.name}</Typography>
-          {categoryTotal > category.budgetAmount ? (
-            <Typography variant="h6" color="red">
-              Total Spent: {currencyFormatter.format(categoryTotal)}
-            </Typography>
-          ) : (
-            <Typography variant="h6">Total Spent: {currencyFormatter.format(categoryTotal)}</Typography>
+          {selections[0] && (
+            <Button variant="contained" onClick={handleDelete} color="error">
+              Delete
+            </Button>
           )}
-        </Stack>
-      </Stack>
 
-      <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          // initialState={{
-          //   pagination: {
-          //     paginationModel: {
-          //       pageSize: 5,
-          //     },
-          //   },
-          // }}
-          // pageSizeOptions={[5]}
-          autoPageSize
-          checkboxSelection
-          disableRowSelectionOnClick
-          onSelectionModelChange={(newSelection) => {
-            setSelections(newSelection);
-          }}
-          onCellEditCommit={(params) => handleCellEditCommit(params)}
-        />
-      </Box>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        sx={{ marginBottom: "20px" }}
-      >
-        {selections[0] && (
-          <Button variant="contained" onClick={handleDelete} color="error">
-            Delete
-          </Button>
-        )}
-
-        <Stack direction="row" justifyContent="flex-end" sx={{ width: "100%" }}>
-          <Button variant="contained" onClick={deleteCategory} color="error">
-            Delete Category
-          </Button>
+          <Stack
+            direction="row"
+            justifyContent="flex-end"
+            sx={{ width: "100%" }}
+          >
+            <Button variant="contained" onClick={deleteCategory} color="error">
+              Delete Category
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
+      </Paper>
     </Grid>
   );
 };

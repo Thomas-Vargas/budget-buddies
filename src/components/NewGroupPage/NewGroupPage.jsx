@@ -208,7 +208,12 @@ const NewGroupPage = () => {
                   })
                 }
               />
-              <Button variant="contained" onClick={addCategory} size="small">
+              <Button
+                variant="contained"
+                onClick={addCategory}
+                size="small"
+                style={{ backgroundColor: "#5B4570" }}
+              >
                 Add Category
               </Button>
             </div>
@@ -269,6 +274,7 @@ const NewGroupPage = () => {
               sx={{
                 marginLeft: "20px",
               }}
+              style={{ backgroundColor: "#5B4570" }}
               onClick={saveUserInState}
             >
               Add User
@@ -276,11 +282,7 @@ const NewGroupPage = () => {
           </div>
           <p>
             {addedUser && (
-              <Stack
-                direction="row"
-                alignItems="center"
-                gap="10px"
-              >
+              <Stack direction="row" alignItems="center" gap="10px">
                 <CheckIcon /> {addedUser}
               </Stack>
             )}
@@ -288,7 +290,11 @@ const NewGroupPage = () => {
         </div>
       </div>
       <center>
-        <Button variant="contained" onClick={createNewGroup}>
+        <Button
+          variant="contained"
+          onClick={createNewGroup}
+          style={{ backgroundColor: "#5B4570" }}
+        >
           Create Group
         </Button>
       </center>
