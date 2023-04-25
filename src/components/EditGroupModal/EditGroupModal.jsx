@@ -39,16 +39,38 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
   };
 
   const saveGroupChanges = () => {
-    // update "groups".name, need "groups".id -> currentGroup.groupId
-    dispatch({ type: "UPDATE_GROUP_NAME", payload: {...editedGroupInfo, id: currentGroup.groupId}});
-    // update "budget".totalBudget, need "budget".id
-    handleEditClose();
-  }
+    if (editedGroupInfo.name || editedGroupInfo.income1) {
+      // update "groups".name, need "groups".id -> currentGroup.groupId
+      if (editedGroupInfo.name) {
+        dispatch({
+          type: "UPDATE_GROUP_NAME",
+          payload: { ...editedGroupInfo, id: currentGroup.groupId },
+        });
+      }
+      if (editedGroupInfo.income1) {
+        // update "budget".totalBudget, need "budget".id
+        const newObj = {
+          totalBudget:
+            Number(editedGroupInfo.income1) + Number(editedGroupInfo.income2),
+          id: currentGroup.groupId,
+          budgetId: currentGroup.id,
+        };
 
-  useEffect(() => {
-    setEditedGroupInfo({...editedGroupInfo, name:  currentGroup.name})
-  }, []);
-
+        dispatch({
+          type: "UPDATE_BUDGET_AMOUNT",
+          payload: newObj,
+        });
+      }
+      setEditedGroupInfo({
+        name: "",
+        income1: "",
+        income2: "",
+      });
+      handleEditClose();
+    } else {
+      alert("nope")
+    }
+  };
 
   return (
     <div>
@@ -78,7 +100,10 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
                 variant="outlined"
                 value={editedGroupInfo.name}
                 onChange={(e) =>
-                  setEditedGroupInfo({ ...editedGroupInfo, name: e.target.value })
+                  setEditedGroupInfo({
+                    ...editedGroupInfo,
+                    name: e.target.value,
+                  })
                 }
               />
               <Stack direction="column" gap="10px">
@@ -89,7 +114,10 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
                   variant="outlined"
                   value={editedGroupInfo.income1}
                   onChange={(e) =>
-                    setEditedGroupInfo({ ...editedGroupInfo, income1: e.target.value })
+                    setEditedGroupInfo({
+                      ...editedGroupInfo,
+                      income1: e.target.value,
+                    })
                   }
                 />
                 <TextField
@@ -98,7 +126,10 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
                   variant="outlined"
                   value={editedGroupInfo.income2}
                   onChange={(e) =>
-                    setEditedGroupInfo({ ...editedGroupInfo, income2: e.target.value })
+                    setEditedGroupInfo({
+                      ...editedGroupInfo,
+                      income2: e.target.value,
+                    })
                   }
                 />
               </Stack>
