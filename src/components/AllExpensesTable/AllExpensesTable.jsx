@@ -13,26 +13,11 @@ const AllExpensesTable = () => {
   const allExpenses = useSelector((store) => store.expenses);
   const categories = useSelector(store => store.categories);
 
-  let totalBudgetAmount = 0;
-  let totalMoneySpent = 0;
-  let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
-
-  if (categories[0]) {
-    categories.map((category) => (totalBudgetAmount += category.budgetAmount));
-  }
-
-  allExpenses.map((expense) => (totalMoneySpent += expense.amount));
-
   useEffect(() => {
     currentGroup.id &&
       dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
     dispatch({ type: "FETCH_CURRENT_GROUP", payload: groupId });
   }, [currentGroup.id]);
-
-  const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
 
   const columns = [
     {
@@ -40,6 +25,7 @@ const AllExpensesTable = () => {
       headerName: "Expense",
       width: 200,
       editable: true,
+      aling: "left"
     },
     {
       field: "amount",
@@ -48,18 +34,22 @@ const AllExpensesTable = () => {
       width: 200,
       editable: true,
       valueFormatter: ({ value }) => currencyFormatter.format(value),
+      align: "left",
+      headerAlign: 'left',
     },
     {
       field: "categoryName",
       headerName: "Category",
       width: 200,
       editable: false,
+      align: "left"
     },
     {
       field: "username",
       headerName: "User",
       width: 200,
       editable: false,
+      align: "left"
     },
   ];
 
@@ -90,6 +80,11 @@ const AllExpensesTable = () => {
     dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: currentGroup.id });
   };
 
+  const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   return (
     <div>
       <Grid item xs={6}>
@@ -98,43 +93,11 @@ const AllExpensesTable = () => {
           justifyContent="space-between"
           sx={{ mb: "20px" }}
         >
-          <Stack direction="column" gap="10px">
-            <Typography variant="h5">
-              Monthly Income: {currencyFormatter.format(monthlyIncome)}
-            </Typography>
-            <Typography variant="h5">
-              Projected Budget:{" "}
-              {totalBudgetAmount > Math.round(currentGroup.totalBudget / 12) ? (
-                <span style={{ color: "red" }}>
-                  {currencyFormatter.format(totalBudgetAmount)}
-                </span>
-              ) : (
-                <span>{currencyFormatter.format(totalBudgetAmount)}</span>
-              )}
-            </Typography>
-            <Typography variant="h5">
-              Money Left:{" "}
-              {totalMoneySpent > totalBudgetAmount ? (
-                <span style={{ color: "red" }}>
-                  {currencyFormatter.format(
-                    totalMoneySpent - totalBudgetAmount
-                  )}{" "}
-                  Over Projected Budget
-                </span>
-              ) : (
-                <span>
-                  {currencyFormatter.format(
-                    totalBudgetAmount - totalMoneySpent
-                  )}{" "}
-                  left
-                </span>
-              )}
-            </Typography>
-          </Stack>
+          
         </Stack>
         <Paper
           sx={{
-            height: "700px",
+            height: "600px",
             width: "100%",
             marginBottom: "20px",
             "& .font-tabular-nums": {

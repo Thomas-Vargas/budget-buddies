@@ -8,11 +8,15 @@ import {
   Backdrop,
   Fade,
   TextField,
-  Snackbar
+  Snackbar,
+  IconButton,
+  Box,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import MuiAlert from "@mui/material/Alert";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,15 +24,19 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 // Base: edit name and income
 // Stretch: add/remove users, delete group
-const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
+const EditGroupModal = ({ openEditModal, handleEditClose }) => {
   const [editedGroupInfo, setEditedGroupInfo] = useState({
     name: "",
     income1: "",
     income2: "",
   });
+  const [deleteGroupOpen, setDeleteGroupOpen] = useState(false);
   const [snackSuccessOpen, setSnackSuccessOpen] = useState(false);
   const [snackFailureOpen, setSnackFailureOpen] = useState(false);
 
+  const handleDeleteModalClose = () => {
+    setDeleteGroupOpen(false);
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -38,9 +46,9 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
     setSnackSuccessOpen(false);
     setSnackFailureOpen(false);
   };
-  console.log(editedGroupInfo);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const currentGroup = useSelector((store) => store.currentGroup);
 
@@ -85,13 +93,18 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
         income1: "",
         income2: "",
       });
-      
+
       handleEditClose();
       setSnackSuccessOpen(true);
     } else {
       setSnackFailureOpen(true);
     }
   };
+
+  const deleteGroup = () => {
+    dispatch({ type: "DELETE_GROUP", payload: {groupId: currentGroup.groupId, budgetId: currentGroup.id} });
+    history.push('/newGroup');
+  }
 
   return (
     <div>
@@ -110,10 +123,14 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
       >
         <Fade in={openEditModal}>
           <Paper sx={{ ...style, border: "none" }}>
-            <Typography id="transition-modal-title" variant="h5">
-              Edit Group
-            </Typography>
-
+            <Stack direction="row" justifyContent="space-between">
+              <Typography id="transition-modal-title" variant="h5">
+                Edit Group
+              </Typography>
+              <IconButton onClick={() => setDeleteGroupOpen(true)}>
+                <DeleteIcon />
+              </IconButton>
+            </Stack>
             <Stack direction="column" gap="20px" mt="20px" width="70%">
               <TextField
                 type="text"
@@ -161,7 +178,7 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
             <Stack
               direction="row"
               sx={{ mt: "20px" }}
-              justifyContent="flex-end"
+              justifyContent="space-between"
               gap="20px"
             >
               <Button
@@ -183,6 +200,34 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
         </Fade>
       </Modal>
 
+      <Modal
+        open={deleteGroupOpen}
+        onClose={handleDeleteModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Paper sx={{ ...style, width: 300, border: "none" }}>
+          <Stack gap="20px">
+            <Typography variant="h4">Are you Sure?</Typography>
+            <Typography>
+              This will permanently delete the group and all of it's data.
+            </Typography>
+            <Stack direction="row" justifyContent="space-between">
+              <Button variant="contained" color="error" onClick={() => setDeleteGroupOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#5B4570" }}
+                onClick={() => deleteGroup()}
+              >
+                Delete
+              </Button>
+            </Stack>
+          </Stack>
+        </Paper>
+      </Modal>
+
       <Snackbar
         open={snackFailureOpen}
         autoHideDuration={3000}
@@ -201,7 +246,11 @@ const EditGroupModal = ({ openEditModal, handleEditClose, handleEditOpen }) => {
         autoHideDuration={3000}
         onClose={handleClose}
       >
-        <Alert onClose={() => setSnackFailureOpen(false)} severity="success" sx={{ width: "100%" }}>
+        <Alert
+          onClose={() => setSnackFailureOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Group info updated!
         </Alert>
       </Snackbar>

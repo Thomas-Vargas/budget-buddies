@@ -96,7 +96,9 @@ const DonutChart = ({}) => {
     return `hsl(${hue}, 70%, 50%)`;
   }
 
-  return <canvas id="donut" ref={canvasRef}></canvas>;
+  return (
+      <canvas id="donut" ref={canvasRef}></canvas>
+  )
 };
 
 export default DonutChart;

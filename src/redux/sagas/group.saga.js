@@ -81,6 +81,14 @@ function* updateGroupName(action) {
     console.log('failure in updateGroupName saga', error);
   }
 }
+function* deleteGroup(action) {
+  try {
+    yield axios.delete('/api/group/delete', { data: action.payload} );
+    yield put( {type: "FETCH_ALL_GROUPS"} )
+  } catch (error) {
+    console.log('failure in deleteGroup saga', error)
+  }
+}
 
 function* groupSaga() {
   // budget -> groups -> user_group -> categories
@@ -91,6 +99,7 @@ function* groupSaga() {
   yield takeLatest('FETCH_CURRENT_GROUP', fetchCurrentGroup);
   yield takeLatest('FETCH_ALL_GROUPS', fetchAllGroups);
   yield takeLatest('UPDATE_GROUP_NAME', updateGroupName);
+  yield takeLatest('DELETE_GROUP', deleteGroup);
 }
 
 export default groupSaga
