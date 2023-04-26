@@ -162,4 +162,57 @@ router.put("/update/:id", rejectUnauthenticated, (req, res) => {
     });
 })
 
+router.delete("/delete", rejectUnauthenticated, async (req, res) => {
+  const groupInfo = req.body;
+  console.log(groupInfo)
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    await client.query(
+      `DELETE FROM expenses WHERE "categoryId" IN (
+        SELECT id FROM categories WHERE categories."budgetId" IN (
+          SELECT groups."budgetId" FROM groups WHERE groups.id = $1
+        )
+      )`,
+      [groupInfo.groupId]
+    );
+
+    await client.query(
+      `DELETE FROM categories WHERE categories."budgetId" IN (
+        SELECT groups."budgetId" FROM groups WHERE groups.id = $1
+      )`,
+      [groupInfo.groupId]
+    );
+
+    await client.query(
+      `DELETE FROM "user_groups" WHERE "user_groups"."groupsId" = $1`,
+      [groupInfo.groupId]
+    );
+
+    await client.query("DELETE FROM groups WHERE groups.id = $1", [
+      groupInfo.groupId
+    ]);
+
+    await client.query("DELETE FROM budget WHERE budget.id = $1", [
+      groupInfo.budgetId
+    ]);
+
+    await client.query("COMMIT");
+    res.sendStatus(200);
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Failed to delete group: ", err);
+    res.sendStatus(500);
+  } finally {
+    client.release();
+  }
+});
+
+
+
+
+
+
 module.exports = router;
