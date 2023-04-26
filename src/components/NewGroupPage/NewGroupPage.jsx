@@ -102,13 +102,19 @@ const NewGroupPage = () => {
 
   const addCategory = () => {
     if (newCategory.name && newCategory.budgetAmount) {
-      setCategories([...categories, newCategory]);
+      let newObj = {
+        ...newCategory,
+        budgetAmount: Number(newCategory.budgetAmount),
+      };
+      setCategories([...categories, newObj]);
       setNewCategory({ name: "", budgetAmount: "" });
       setCategorySuccessSnackOpen(true);
     } else {
       setCategoryErrorSnackOpen(true);
     }
   };
+
+  console.log(categories);
 
   const removeCategory = (i) => {
     let newState = [...categories];
@@ -176,6 +182,7 @@ const NewGroupPage = () => {
                   setNewBudget({ ...newBudget, name: e.target.value })
                 }
               />
+              <Typography variant="h4">Monthly Takehome</Typography>
               <TextField
                 type="Number"
                 label="Income"
@@ -192,7 +199,7 @@ const NewGroupPage = () => {
             </div>
 
             <div className="category-btn-group">
-              <Typography variant="h3" sx={{ margin: "40px 0px" }}>
+              <Typography variant="h4" sx={{ margin: "40px 0px" }}>
                 Categories
               </Typography>
 
@@ -216,7 +223,7 @@ const NewGroupPage = () => {
                   onChange={(e) =>
                     setNewCategory({
                       ...newCategory,
-                      budgetAmount: Number(e.target.value),
+                      budgetAmount: e.target.value,
                     })
                   }
                 />
@@ -232,7 +239,7 @@ const NewGroupPage = () => {
 
               {categories.map((category, i) => (
                 <div className="category" key={category.name}>
-                  <Typography variant="h4" margin="20px 0px">
+                  <Typography variant="h5" margin="20px 0px">
                     {category.name}
                   </Typography>
                   <TextField
@@ -299,13 +306,11 @@ const NewGroupPage = () => {
                 Add User
               </Button>
             </div>
-            <p>
-              {addedUser && (
-                <Stack direction="row" alignItems="center" gap="10px">
-                  <CheckIcon /> {addedUser}
-                </Stack>
-              )}
-            </p>
+            {addedUser && (
+              <Stack direction="row" alignItems="center" gap="10px" mt="20px">
+                <CheckIcon /> <Typography>{addedUser}</Typography>
+              </Stack>
+            )}
           </Paper>
         </div>
       </div>
