@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { Stack, Paper, Typography } from "@mui/material";
 
-const ActivityFeed = ({ allExpenses }) => {
+const ActivityFeed = () => {
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   });
+
+  const allExpenses = useSelector((store) => store.expenses)
 
   return (
     <div>

@@ -41,9 +41,8 @@ const AddExpenseForm = ({ categories, groupId }) => {
 
   const addExpense = () => {
     if (newExpense.name && newExpense.categoryName && newExpense.amount) {
-      let expensePayload = { ...newExpense, budgetId: groupId };
+      let expensePayload = { ...newExpense, budgetId: groupId, currentGroup: currentGroup.id };
       dispatch({ type: "ADD_NEW_EXPENSE", payload: expensePayload });
-      dispatch({ type: "FETCH_ALL_GROUP_EXPENSES", payload: currentGroup.id });
       setNewExpense({ name: "", categoryName: "", amount: "" });
       setSuccessSnackOpen(true);
     } else {
