@@ -3,8 +3,10 @@ import { put, takeLatest } from 'redux-saga/effects';
 
 function* addNewExpense(action) {
   try {
+    console.log("action.payload in addnewexpense", action.payload)
     yield axios.post('/api/expenses', action.payload);
     yield put({ type: 'FETCH_GROUP_CATEGORIES', payload: action.payload.budgetId})
+    yield put({ type: "FETCH_ALL_GROUP_EXPENSES", payload: action.payload.currentGroup });
   } catch (error) {
     console.log('Error in addNewExpense saga', error);
   }
@@ -42,6 +44,7 @@ function* updateExpense(action) {
 
 function* fetchAllgroupExpenses(action) {
   try {
+    console.log("action.payload in fetchallexpenses",action.payload)
     const response = yield axios.get(`/api/expenses/allGroupExpenses/${action.payload}`);
     yield put({ type: 'SET_ALL_GROUP_EXPENSES', payload: response.data });
   } catch (error) {
