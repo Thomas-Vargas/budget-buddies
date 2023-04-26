@@ -79,6 +79,15 @@ const NewGroupPage = () => {
 
   const allUsers = useSelector((store) => store.allUsers);
   const currentUser = useSelector((store) => store.user);
+  // get the newly created groupId from the store
+  const groupId = useSelector((store) => store.currentGroup.groupId);
+
+  useEffect(() => {
+    if (groupId) {
+      // update route and send user to new group dashboard
+      history.push(`/groupDashboard/${groupId}`);
+    }
+  }, [groupId, history]);
 
   // console.log(newBudget);
   // console.log(categories);
@@ -137,14 +146,12 @@ const NewGroupPage = () => {
         username: addedUser,
         categories: categories,
       };
-      console.log("Payload:", newGroupObj);
+      // console.log("Payload:", newGroupObj);
 
       //Dispatch to create new group
       dispatch({ type: "CREATE_GROUP", payload: newGroupObj });
       // send to new group dashboard
       setSuccessSnackOpen(true);
-
-      // history.push(`groupDashboard/`);
       clearAllState();
     } else {
       setErrorSnackOpen(true);
@@ -225,7 +232,9 @@ const NewGroupPage = () => {
 
               {categories.map((category, i) => (
                 <div className="category" key={category.name}>
-                  <Typography variant="h4" margin="20px 0px">{category.name}</Typography>
+                  <Typography variant="h4" margin="20px 0px">
+                    {category.name}
+                  </Typography>
                   <TextField
                     type="Number"
                     label="Amount"
@@ -249,7 +258,9 @@ const NewGroupPage = () => {
 
         <div className="add-user">
           <Paper elevation={6} sx={{ padding: "40px", height: "100%" }}>
-            <Typography variant="h3" margin="0px 0px 40px 0px">Add User to Group</Typography>
+            <Typography variant="h3" margin="0px 0px 40px 0px">
+              Add User to Group
+            </Typography>
             <div className="add-user-form">
               {/* <TextField
               type="text"

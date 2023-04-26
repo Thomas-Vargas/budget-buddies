@@ -34,6 +34,8 @@ function* createUserGroup(action) {
     console.log('payload in creatUsergroup', action.payload)
     yield axios.post('/api/group/createUserGroup', action.payload);
     yield put({ type: 'FETCH_ALL_GROUPS' });
+    // new code for group creation
+    yield put({ type: "FETCH_CURRENT_GROUP", payload: {id: action.payload.groupId} })
   } catch (error) {
     console.log('Failure in create user group saga', error);
   }

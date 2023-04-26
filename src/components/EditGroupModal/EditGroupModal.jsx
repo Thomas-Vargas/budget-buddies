@@ -103,6 +103,7 @@ const EditGroupModal = ({ openEditModal, handleEditClose }) => {
 
   const deleteGroup = () => {
     dispatch({ type: "DELETE_GROUP", payload: {groupId: currentGroup.groupId, budgetId: currentGroup.id} });
+    dispatch({ type: "UNSET_CURRENT_GROUP" });
     history.push('/newGroup');
   }
 

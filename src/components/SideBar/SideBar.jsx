@@ -99,6 +99,11 @@ const SideBar = ({ component, darkModeController }) => {
     history.push(`/allExpenses/${group.groupId}`);
   };
 
+  const handleNewGroupClick = () => {
+    dispatch({ type: "UNSET_CURRENT_GROUP" })
+    history.push("/newGroup")
+  }
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -171,7 +176,7 @@ const SideBar = ({ component, darkModeController }) => {
                 </ListItemButton>
               </ListItem>{" "}
               <ListItem disablePadding>
-                <ListItemButton onClick={() => history.push("/newGroup")}>
+                <ListItemButton onClick={() => handleNewGroupClick()}>
                   <ListItemText primary={"Create New Group"} />
                 </ListItemButton>
               </ListItem>
