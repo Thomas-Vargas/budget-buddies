@@ -52,7 +52,7 @@ const GroupDashboard = () => {
 
   let totalBudgetAmount = 0;
   let totalMoneySpent = 0;
-  let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
+  let monthlyIncome = currentGroup.totalBudget;
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -221,7 +221,7 @@ const GroupDashboard = () => {
                     Monthly Income: {currencyFormatter.format(monthlyIncome)}
                   </Typography>
                   <Typography variant="h5">
-                    Projected Budget:{" "}
+                    Projected Monthly Budget:{" "}
                     {totalBudgetAmount >
                     Math.round(currentGroup.totalBudget / 12) ? (
                       <span style={{ color: "red" }}>
@@ -232,7 +232,7 @@ const GroupDashboard = () => {
                     )}
                   </Typography>
                   <Typography variant="h5">
-                    Money Left:{" "}
+                    Remaining Budget:{" "}
                     {totalMoneySpent > totalBudgetAmount ? (
                       <span style={{ color: "red" }}>
                         {currencyFormatter.format(

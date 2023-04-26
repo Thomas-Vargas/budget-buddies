@@ -34,7 +34,7 @@ const AllExpensesPage = () => {
 
   let totalBudgetAmount = 0;
   let totalMoneySpent = 0;
-  let monthlyIncome = Math.round(currentGroup.totalBudget / 12);
+  let monthlyIncome = currentGroup.totalBudget;
 
   if (categories[0]) {
     categories.map((category) => (totalBudgetAmount += category.budgetAmount));
@@ -89,7 +89,7 @@ const AllExpensesPage = () => {
               Monthly Income: {currencyFormatter.format(monthlyIncome)}
             </Typography>
             <Typography variant="h5">
-              Projected Budget:{" "}
+              Projected Monthly Budget:{" "}
               {totalBudgetAmount > Math.round(currentGroup.totalBudget / 12) ? (
                 <span style={{ color: "red" }}>
                   {currencyFormatter.format(totalBudgetAmount)}
@@ -99,7 +99,7 @@ const AllExpensesPage = () => {
               )}
             </Typography>
             <Typography variant="h5">
-              Money Left:{" "}
+              Remaining Budget:{" "}
               {totalMoneySpent > totalBudgetAmount ? (
                 <span style={{ color: "red" }}>
                   {currencyFormatter.format(
