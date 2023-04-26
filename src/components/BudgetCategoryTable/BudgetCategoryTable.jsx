@@ -31,7 +31,8 @@ const BudgetCategoryTable = ({ category }) => {
   const [editedCategory, setEditedCategory] = useState({ name: "", value: "" });
   const [editToggle, setEditToggle] = useState(false);
   const [open, setOpen] = useState(false);
-  const [cellDeleteSuccessSnackOpen, setCellDeleteSuccessSnackOpen] = useState(false);
+  const [cellDeleteSuccessSnackOpen, setCellDeleteSuccessSnackOpen] =
+    useState(false);
   const [categoryDeleteSnackOpen, setCategoryDeleteSnackOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -61,7 +62,7 @@ const BudgetCategoryTable = ({ category }) => {
     {
       field: "expenseName",
       headerName: "Expense",
-      width: 150,
+      width: 120,
       editable: true,
     },
     {
@@ -186,13 +187,10 @@ const BudgetCategoryTable = ({ category }) => {
             </Stack>
           ) : (
             <Stack direction="row" justifyContent="space-between">
+              <Typography variant="h5">{category.name}</Typography>
               <IconButton onClick={() => handleEditClick()}>
                 <EditIcon></EditIcon>
               </IconButton>
-              <Typography variant="h6">
-                Target Budget Amount:{" "}
-                {currencyFormatter.format(category.budgetAmount)}
-              </Typography>
             </Stack>
           )}
 
@@ -202,7 +200,11 @@ const BudgetCategoryTable = ({ category }) => {
             justifyContent="space-between"
             marginBottom="10px"
           >
-            <Typography variant="h5">{category.name}</Typography>
+            {" "}
+            <Typography variant="h6">
+              Target Budget Amount:{" "}
+              {currencyFormatter.format(category.budgetAmount)}
+            </Typography>
             {categoryTotal > category.budgetAmount ? (
               <Typography variant="h6" color="red">
                 Total Spent: {currencyFormatter.format(categoryTotal)}
@@ -215,7 +217,7 @@ const BudgetCategoryTable = ({ category }) => {
           </Stack>
         </Stack>
 
-        <Box sx={{ height: 400, width: "100%", marginBottom: "20px" }}>
+        <Box sx={{ height: 319, width: "100%", marginBottom: "20px" }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -298,13 +300,29 @@ const BudgetCategoryTable = ({ category }) => {
         </Fade>
       </Modal>
 
-      <Snackbar open={cellDeleteSuccessSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-        <Alert onClose={() => setCellDeleteSuccessSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+      <Snackbar
+        open={cellDeleteSuccessSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={() => setCellDeleteSuccessSnackOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Expenses deleted.
         </Alert>
       </Snackbar>
-      <Snackbar open={categoryDeleteSnackOpen} autoHideDuration={6000} onClose={handleSnackClose}>
-        <Alert onClose={() => setCategoryDeleteSnackOpen(false)} severity="success" sx={{ width: "100%" }}>
+      <Snackbar
+        open={categoryDeleteSnackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={() => setCategoryDeleteSnackOpen(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Category Deleted!
         </Alert>
       </Snackbar>

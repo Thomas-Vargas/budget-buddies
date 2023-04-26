@@ -150,7 +150,7 @@ const GroupDashboard = () => {
           </Stack>
           <Typography variant="h6">{todaysDate}</Typography>
           <Stack direction="row" gap="40px">
-            <Stack direction="column" width="80%">
+            <Stack direction="column" width="100%">
               {/* Display monthly income before tax */}
               {/* stretch: implement monthly take home based on taxes by state */}
 

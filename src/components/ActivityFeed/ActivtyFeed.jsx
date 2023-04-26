@@ -9,7 +9,7 @@ const ActivityFeed = ({ allExpenses }) => {
 
   return (
     <div>
-      <Paper elevation={6} sx={{ padding: "40px" }}>
+      <Paper elevation={6} sx={{ padding: "40px", height: "100%" }}>
         <Stack direction="column" gap="10px">
           <Typography variant="h4">Group Activity</Typography>
           {allExpenses.map((expense) => (
