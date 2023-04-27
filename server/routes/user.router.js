@@ -48,7 +48,7 @@ router.post("/logout", (req, res) => {
 });
 
 router.get("/allUsers", rejectUnauthenticated, (req, res) => {
-  const sqlText = `SELECT "user".username FROM "user"`;
+  const sqlText = `SELECT "user".username, "user".id FROM "user"`;
 
   pool
     .query(sqlText)

@@ -17,10 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import "./NewGroupPage.css";
 
-// TODO
-// some info letting user know that budget line items are per month
-// check if username is exists in database, only let them add the person if it does
-
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -30,7 +26,7 @@ const NewGroupPage = () => {
   const [income1, setIncome1] = useState(0);
   const [income2, setIncome2] = useState(0);
   const [username, setUsername] = useState("");
-  const [addedUser, setAddedUser] = useState("");
+  const [addedUsers, setAddedUsers] = useState([]);
   const [newCategory, setNewCategory] = useState({
     name: "",
     budgetAmount: "",
@@ -53,7 +49,7 @@ const NewGroupPage = () => {
     setIncome1(0);
     setIncome1(0);
     setUsername("");
-    setAddedUser("");
+    setAddedUsers([]);
     setNewCategory({ name: "", budgetAmount: "" });
     setCategories([
       { name: "Rent", budgetAmount: "" },
@@ -89,7 +85,7 @@ const NewGroupPage = () => {
     }
   }, [groupId, history]);
 
-  // console.log(newBudget);
+  console.log(addedUsers);
   // console.log(categories);
   // console.log(newCategory);
 
@@ -134,7 +130,11 @@ const NewGroupPage = () => {
     }
 
     if (validated) {
-      setAddedUser(username);
+      for (let user of allUsers) {
+        if (user.username === username) {
+          setAddedUsers([...addedUsers, {id: user.id, username: username}]);
+        }
+      }
       setUsername("");
       setUserSuccessSnackOpen(true);
     } else {
@@ -143,20 +143,19 @@ const NewGroupPage = () => {
   };
 
   const createNewGroup = () => {
-    if (income1 && newBudget.name && addedUser) {
+    if (income1 && newBudget.name && addedUsers) {
       let newGroupObj = {
         budget: {
           ...newBudget,
           totalBudget: Number(income1) + Number(income2),
         },
-        username: addedUser,
+        members: [...addedUsers, {id: currentUser.id, username: currentUser.username}],
         categories: categories,
       };
-      // console.log("Payload:", newGroupObj);
+      console.log("Payload:", newGroupObj);
 
       //Dispatch to create new group
       dispatch({ type: "CREATE_GROUP", payload: newGroupObj });
-      // send to new group dashboard
       setSuccessSnackOpen(true);
       clearAllState();
     } else {
@@ -306,11 +305,12 @@ const NewGroupPage = () => {
                 Add User
               </Button>
             </div>
-            {addedUser && (
-              <Stack direction="row" alignItems="center" gap="10px" mt="20px">
-                <CheckIcon /> <Typography>{addedUser}</Typography>
-              </Stack>
-            )}
+            {addedUsers[0] &&
+              addedUsers.map((user) => (
+                <Stack direction="row" alignItems="center" gap="10px" mt="20px" key={user.id}>
+                  <CheckIcon /> <Typography>{user.username}</Typography>
+                </Stack>
+              ))}
           </Paper>
         </div>
       </div>
