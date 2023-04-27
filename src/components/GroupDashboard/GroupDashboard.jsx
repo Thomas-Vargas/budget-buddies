@@ -27,6 +27,7 @@ import EditGroupModal from "../EditGroupModal/EditGroupModal";
 
 import "./GroupDashboard.css";
 import CouplesGroupDataHeader from "../CouplesGroupDataHeader/CouplesGroupDataHeader";
+import GroupDataHeader from "../GroupDataHeader/GroupDataHeader";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -217,42 +218,11 @@ const GroupDashboard = () => {
                 alignItems="flex-end"
                 sx={{ marginBottom: "40px" }}
               >
-                {/* <Stack direction="column" gap="10px">
-                  <Typography variant="h5">
-                    Monthly Income: {currencyFormatter.format(monthlyIncome)}
-                  </Typography>
-                  <Typography variant="h5">
-                    Projected Monthly Budget:{" "}
-                    {totalBudgetAmount >
-                    Math.round(currentGroup.totalBudget / 12) ? (
-                      <span style={{ color: "red" }}>
-                        {currencyFormatter.format(totalBudgetAmount)}
-                      </span>
-                    ) : (
-                      <span>{currencyFormatter.format(totalBudgetAmount)}</span>
-                    )}
-                  </Typography>
-                  <Typography variant="h5">
-                    Remaining Budget:{" "}
-                    {totalMoneySpent > totalBudgetAmount ? (
-                      <span style={{ color: "red" }}>
-                        {currencyFormatter.format(
-                          totalMoneySpent - totalBudgetAmount
-                        )}{" "}
-                        Over Projected Budget
-                      </span>
-                    ) : (
-                      <span>
-                        {currencyFormatter.format(
-                          totalBudgetAmount - totalMoneySpent
-                        )}{" "}
-                        left
-                      </span>
-                    )}
-                  </Typography>
-                </Stack> */}
-
-                <CouplesGroupDataHeader />
+                {currentGroup.members[0] && currentGroup.members.length > 2 ? (
+                  <GroupDataHeader />
+                ) : (
+                  <CouplesGroupDataHeader />
+                )}
 
                 <Button
                   variant="contained"

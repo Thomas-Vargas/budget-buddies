@@ -1,7 +1,7 @@
 import { Stack, Typography, } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const CouplesGroupDataHeader = () => {
+const GroupDataHeader = () => {
   const currentGroup = useSelector(store => store.currentGroup);
   const categories = useSelector(store => store.categories);
   const allExpenses = useSelector(store => store.expenses);
@@ -25,10 +25,10 @@ const CouplesGroupDataHeader = () => {
     <div>
       <Stack direction="column" gap="10px">
         <Typography variant="h5">
-          Monthly Income: {currencyFormatter.format(monthlyIncome)}
+          Target Cost Per Person: {currencyFormatter.format(monthlyIncome)}
         </Typography>
         <Typography variant="h5">
-          Projected Monthly Budget:{" "}
+          Projected Cost Per Person:{" "}
           {totalBudgetAmount > currentGroup.totalBudget ? (
             <span style={{ color: "red" }}>
               {currencyFormatter.format(totalBudgetAmount)}
@@ -38,16 +38,14 @@ const CouplesGroupDataHeader = () => {
           )}
         </Typography>
         <Typography variant="h5">
-          Remaining Budget:{" "}
+          Actual Cost Per Person:{" "}
           {totalMoneySpent > totalBudgetAmount ? (
             <span style={{ color: "red" }}>
-              {currencyFormatter.format(totalMoneySpent - totalBudgetAmount)}{" "}
-              Over Projected Budget
+              {currencyFormatter.format(totalMoneySpent)}{" "}
             </span>
           ) : (
             <span>
               {currencyFormatter.format(totalBudgetAmount - totalMoneySpent)}{" "}
-              left
             </span>
           )}
         </Typography>
@@ -56,4 +54,4 @@ const CouplesGroupDataHeader = () => {
   );
 };
 
-export default CouplesGroupDataHeader;
+export default GroupDataHeader;
