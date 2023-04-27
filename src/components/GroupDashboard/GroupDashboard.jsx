@@ -47,7 +47,12 @@ const GroupDashboard = () => {
   const allExpenses = useSelector((store) => store.expenses);
 
   let date = new Date();
-  let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  let options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
   let todaysDate = date.toLocaleDateString("en-US", options);
 
   let totalBudgetAmount = 0;
@@ -135,10 +140,10 @@ const GroupDashboard = () => {
             sx={{ height: "40px", mb: "20px" }}
           >
             <Stack direction="row" alignItems="center" gap="5px">
+              <Typography variant="h3">{currentGroup.name}</Typography>
               <IconButton onClick={() => handleEditOpen()}>
                 <EditIcon></EditIcon>
               </IconButton>
-              <Typography variant="h3">{currentGroup.name}</Typography>
             </Stack>
             <Button
               variant="contained"
@@ -280,7 +285,24 @@ const GroupDashboard = () => {
                 </Grid>
               </Box>
             </Stack>
-            <ActivityFeed allExpenses={allExpenses} />
+            <Stack direction="column" gap="20px">
+              <Paper elevation={6}>
+                <Box padding="40px">
+                  <Typography variant="h4" mb="10px">
+                    Group Members
+                  </Typography>
+                  <Stack>
+                    {currentGroup.members[0] &&
+                      currentGroup.members.map((member) => (
+                        <Typography variant="h6" key={member}>
+                          {member}
+                        </Typography>
+                      ))}
+                  </Stack>
+                </Box>
+              </Paper>
+              <ActivityFeed allExpenses={allExpenses} />
+            </Stack>
           </Stack>
         </div>
       )}

@@ -36,7 +36,7 @@ const HomeDashboard = () => {
         Welcome, {user.username}
       </Typography>
 
-      <Stack direction="row" ml="30%">
+      <Stack direction="row" ml="27%">
         <Typography variant="h3" mb="20px">
           Your groups
         </Typography>

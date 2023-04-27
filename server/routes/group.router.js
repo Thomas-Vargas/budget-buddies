@@ -10,11 +10,15 @@ router.get("/currentGroup/:id", rejectUnauthenticated, (req, res) => {
   const groupId = req.params.id;
 
   const sqlText = `
-    SELECT "user".id, "user".username, "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget" FROM "user_groups"
-    JOIN "user" ON "user".id = user_groups."userId"
-    JOIN "groups" ON "groups".id = user_groups."groupsId"
-    JOIN "budget" ON "budget".id = "groups"."budgetId"
-    WHERE "user".id = $1 AND "groups".id = $2;
+  SELECT "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget", 
+  (SELECT array_agg(DISTINCT "user".username) FROM "user_groups" JOIN "user" ON "user".id = user_groups."userId"
+   WHERE "user_groups"."groupsId" = "groups".id) AS "members"
+  FROM "user_groups"
+  JOIN "user" ON "user".id = user_groups."userId"
+  JOIN "groups" ON "groups".id = user_groups."groupsId"
+  JOIN "budget" ON "budget".id = "groups"."budgetId"
+  WHERE "groups".id = $2 AND "user".id = $1
+  GROUP BY "groups".id, "budget".id, "budget"."totalBudget";
   `;
 
   pool
@@ -49,21 +53,21 @@ router.get("/user/:username", rejectUnauthenticated, (req, res) => {
 router.get("/userGroups", rejectUnauthenticated, (req, res) => {
   const userId = req.user.id;
   const sqlText = `
-  SELECT "user_groups"."groupsId" AS "groupId", 
-  "groups".name AS "name",
-  "budget"."totalBudget" AS "totalBudget",
-  "budget".id,
-  ARRAY_AGG(DISTINCT "user".username) AS "users",
-  sum(expenses.amount / 2) AS "totalSpent"
-FROM "user_groups"
-INNER JOIN "groups" ON "user_groups"."groupsId" = "groups".id
-LEFT JOIN "user" ON "user_groups"."userId" = "user".id
-INNER JOIN "budget" ON "budget".id = "groups"."budgetId"
-LEFT JOIN "expenses" ON "expenses".budget_id = "budget".id
-WHERE "user_groups"."groupsId" IN (
-SELECT "groupsId" FROM "user_groups" WHERE "userId" = $1 -- replace 123 with the desired user id
-)
-GROUP BY "user_groups"."groupsId", "groups".name, "totalBudget", "budget".id;
+    SELECT "user_groups"."groupsId" AS "groupId", 
+    "groups".name AS "name",
+    "budget"."totalBudget" AS "totalBudget",
+    "budget".id,
+    ARRAY_AGG(DISTINCT "user".username) AS "users",
+    sum(expenses.amount / 2) AS "totalSpent"
+    FROM "user_groups"
+    INNER JOIN "groups" ON "user_groups"."groupsId" = "groups".id
+    LEFT JOIN "user" ON "user_groups"."userId" = "user".id
+    INNER JOIN "budget" ON "budget".id = "groups"."budgetId"
+    LEFT JOIN "expenses" ON "expenses".budget_id = "budget".id
+    WHERE "user_groups"."groupsId" IN (
+    SELECT "groupsId" FROM "user_groups" WHERE "userId" = $1 -- replace 123 with the desired user id
+    )
+    GROUP BY "user_groups"."groupsId", "groups".name, "totalBudget", "budget".id;
   `;
 
   pool

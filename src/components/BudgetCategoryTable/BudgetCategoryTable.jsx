@@ -202,7 +202,7 @@ const BudgetCategoryTable = ({ category }) => {
           >
             {" "}
             <Typography variant="h6">
-              Target Budget Amount:{" "}
+              Target Budget:{" "}
               {currencyFormatter.format(category.budgetAmount)}
             </Typography>
             {categoryTotal > category.budgetAmount ? (
