@@ -9,6 +9,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import MuiAlert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -88,7 +89,7 @@ const NewGroupPage = () => {
   console.log(addedUsers);
   // console.log(categories);
   // console.log(newCategory);
-
+  console.log(addedUsers);
   //update budgetAmount on change
   const handleCategoryChange = (e, category, i) => {
     let newState = [...categories];
@@ -132,7 +133,7 @@ const NewGroupPage = () => {
     if (validated) {
       for (let user of allUsers) {
         if (user.username === username) {
-          setAddedUsers([...addedUsers, {id: user.id, username: username}]);
+          setAddedUsers([...addedUsers, { id: user.id, username: username }]);
         }
       }
       setUsername("");
@@ -149,7 +150,10 @@ const NewGroupPage = () => {
           ...newBudget,
           totalBudget: Number(income1) + Number(income2),
         },
-        members: [...addedUsers, {id: currentUser.id, username: currentUser.username}],
+        members: [
+          ...addedUsers,
+          { id: currentUser.id, username: currentUser.username },
+        ],
         categories: categories,
       };
       console.log("Payload:", newGroupObj);
@@ -162,6 +166,12 @@ const NewGroupPage = () => {
       setErrorSnackOpen(true);
     }
   };
+
+  const removeUserFromGroup = (userToRemove) => {
+    let newState = [...addedUsers];
+    newState = newState.filter((user => user.username != userToRemove.username));
+    setAddedUsers(newState);
+  }
 
   return (
     <div className="main-wrapper">
@@ -284,6 +294,7 @@ const NewGroupPage = () => {
                   .map((user) => user.username)}
                 sx={{ width: "60%" }}
                 onSelect={(e) => setUsername(e.target.value)}
+                value={username}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -307,8 +318,18 @@ const NewGroupPage = () => {
             </div>
             {addedUsers[0] &&
               addedUsers.map((user) => (
-                <Stack direction="row" alignItems="center" gap="10px" mt="20px" key={user.id}>
-                  <CheckIcon /> <Typography>{user.username}</Typography>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  gap="10px"
+                  mt="20px"
+                  key={user.id}
+                >
+                  <CheckIcon /> 
+                  <Typography>{user.username}</Typography>
+                  <IconButton onClick={() => removeUserFromGroup(user)}>
+                    <ClearIcon></ClearIcon>
+                  </IconButton>
                 </Stack>
               ))}
           </Paper>
