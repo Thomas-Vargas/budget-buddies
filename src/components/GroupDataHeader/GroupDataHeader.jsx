@@ -1,7 +1,7 @@
 import { Stack, Typography, } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const GroupDataHeader = () => {
+const GroupDataHeader = ({ totalMembers }) => {
   const currentGroup = useSelector(store => store.currentGroup);
   const categories = useSelector(store => store.categories);
   const allExpenses = useSelector(store => store.expenses);
@@ -39,13 +39,13 @@ const GroupDataHeader = () => {
         </Typography>
         <Typography variant="h5">
           Actual Cost Per Person:{" "}
-          {totalMoneySpent > totalBudgetAmount ? (
+          {(totalMoneySpent / totalMembers ) > totalBudgetAmount ? (
             <span style={{ color: "red" }}>
-              {currencyFormatter.format(totalMoneySpent)}{" "}
+              {currencyFormatter.format((totalMoneySpent / totalMembers ))}{" "}
             </span>
           ) : (
             <span>
-              {currencyFormatter.format(totalBudgetAmount - totalMoneySpent)}{" "}
+              {currencyFormatter.format((totalMoneySpent / totalMembers ))}{" "}
             </span>
           )}
         </Typography>

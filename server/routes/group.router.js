@@ -10,15 +10,17 @@ router.get("/currentGroup/:id", rejectUnauthenticated, (req, res) => {
   const groupId = req.params.id;
 
   const sqlText = `
-  SELECT "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget", 
-  (SELECT array_agg(DISTINCT "user".username) FROM "user_groups" JOIN "user" ON "user".id = user_groups."userId"
-   WHERE "user_groups"."groupsId" = "groups".id) AS "members"
-  FROM "user_groups"
-  JOIN "user" ON "user".id = user_groups."userId"
-  JOIN "groups" ON "groups".id = user_groups."groupsId"
-  JOIN "budget" ON "budget".id = "groups"."budgetId"
-  WHERE "groups".id = $2 AND "user".id = $1
-  GROUP BY "groups".id, "budget".id, "budget"."totalBudget";
+    SELECT "groups".id AS "groupId", "groups".name, "budget".id, "budget"."totalBudget", 
+    (SELECT COUNT(DISTINCT "user".id) FROM "user_groups" JOIN "user" ON "user".id = user_groups."userId"
+    WHERE "user_groups"."groupsId" = "groups".id) AS "totalMembers",
+    (SELECT array_agg(DISTINCT "user".username) FROM "user_groups" JOIN "user" ON "user".id = user_groups."userId"
+    WHERE "user_groups"."groupsId" = "groups".id) AS "members"
+    FROM "user_groups"
+    JOIN "user" ON "user".id = user_groups."userId"
+    JOIN "groups" ON "groups".id = user_groups."groupsId"
+    JOIN "budget" ON "budget".id = "groups"."budgetId"
+    WHERE "groups".id = $2 AND "user".id = $1
+    GROUP BY "groups".id, "budget".id, "budget"."totalBudget";
   `;
 
   pool

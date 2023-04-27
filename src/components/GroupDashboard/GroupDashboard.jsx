@@ -219,7 +219,7 @@ const GroupDashboard = () => {
                 sx={{ marginBottom: "40px" }}
               >
                 {currentGroup.members[0] && currentGroup.members.length > 2 ? (
-                  <GroupDataHeader />
+                  <GroupDataHeader totalMembers={currentGroup.totalMembers} />
                 ) : (
                   <CouplesGroupDataHeader />
                 )}
@@ -325,6 +325,7 @@ const GroupDashboard = () => {
         openEditModal={openEditModal}
         handleEditClose={handleEditClose}
         handleEditOpen={handleEditOpen}
+        totalMembers={currentGroup.totalMembers}
       />
 
       <Snackbar

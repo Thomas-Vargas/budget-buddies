@@ -24,15 +24,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 // Base: edit name and income
 // Stretch: add/remove users, delete group
-const EditGroupModal = ({ openEditModal, handleEditClose }) => {
+const EditGroupModal = ({ openEditModal, handleEditClose, totalMembers }) => {
   const [editedGroupInfo, setEditedGroupInfo] = useState({
     name: "",
     income1: "",
     income2: "",
   });
+  const [numberOfMembers, setNumberOfMembers] = [0];
   const [deleteGroupOpen, setDeleteGroupOpen] = useState(false);
   const [snackSuccessOpen, setSnackSuccessOpen] = useState(false);
   const [snackFailureOpen, setSnackFailureOpen] = useState(false);
+
+  console.log("totalMembers: ", totalMembers)
 
   const handleDeleteModalClose = () => {
     setDeleteGroupOpen(false);
@@ -102,10 +105,13 @@ const EditGroupModal = ({ openEditModal, handleEditClose }) => {
   };
 
   const deleteGroup = () => {
-    dispatch({ type: "DELETE_GROUP", payload: {groupId: currentGroup.groupId, budgetId: currentGroup.id} });
+    dispatch({
+      type: "DELETE_GROUP",
+      payload: { groupId: currentGroup.groupId, budgetId: currentGroup.id },
+    });
     dispatch({ type: "UNSET_CURRENT_GROUP" });
-    history.push('/newGroup');
-  }
+    history.push("/newGroup");
+  };
 
   return (
     <div>
@@ -147,32 +153,53 @@ const EditGroupModal = ({ openEditModal, handleEditClose }) => {
                 }
               />
               <Stack direction="column" gap="10px">
-                <Typography>Monthly Take Home</Typography>
-                <TextField
-                  type="number"
-                  label="Income"
-                  variant="outlined"
-                  required
-                  value={editedGroupInfo.income1}
-                  onChange={(e) =>
-                    setEditedGroupInfo({
-                      ...editedGroupInfo,
-                      income1: e.target.value,
-                    })
-                  }
-                />
-                <TextField
-                  type="number"
-                  label="Second Income"
-                  variant="outlined"
-                  value={editedGroupInfo.income2}
-                  onChange={(e) =>
-                    setEditedGroupInfo({
-                      ...editedGroupInfo,
-                      income2: e.target.value,
-                    })
-                  }
-                />
+                {totalMembers > 2 ? (
+                  <div>
+                    <Typography mb="20px">Target Cost Per Person</Typography>
+                    <TextField
+                      type="number"
+                      label="Cost"
+                      variant="outlined"
+                      required
+                      value={editedGroupInfo.income1}
+                      onChange={(e) =>
+                        setEditedGroupInfo({
+                          ...editedGroupInfo,
+                          income1: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                ) : (
+                  <Stack gap="20px">
+                    <Typography>Monthly Take Home</Typography>
+                    <TextField
+                      type="number"
+                      label="Income"
+                      variant="outlined"
+                      required
+                      value={editedGroupInfo.income1}
+                      onChange={(e) =>
+                        setEditedGroupInfo({
+                          ...editedGroupInfo,
+                          income1: e.target.value,
+                        })
+                      }
+                    />
+                    <TextField
+                      type="number"
+                      label="Second Income"
+                      variant="outlined"
+                      value={editedGroupInfo.income2}
+                      onChange={(e) =>
+                        setEditedGroupInfo({
+                          ...editedGroupInfo,
+                          income2: e.target.value,
+                        })
+                      }
+                    />
+                  </Stack>
+                )}
               </Stack>
             </Stack>
 
@@ -214,7 +241,11 @@ const EditGroupModal = ({ openEditModal, handleEditClose }) => {
               This will permanently delete the group and all of it's data.
             </Typography>
             <Stack direction="row" justifyContent="space-between">
-              <Button variant="contained" color="error" onClick={() => setDeleteGroupOpen(false)}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setDeleteGroupOpen(false)}
+              >
                 Cancel
               </Button>
               <Button
