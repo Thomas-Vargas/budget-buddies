@@ -126,7 +126,7 @@ const SideBar = ({ component, darkModeController }) => {
           >
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
               <Typography variant="h5" noWrap component="div">
-                Budget App
+                Budget Buddies
               </Typography>
             </Link>
             {darkModeController}
@@ -161,20 +161,10 @@ const SideBar = ({ component, darkModeController }) => {
           {user.id && (
             <>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => history.push("/user")}>
+                <ListItemButton onClick={() => history.push("/homeDashboard")}>
                   <ListItemText primary={"Home"} />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton onClick={() => history.push("/info")}>
-                  <ListItemText primary={"Info"} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton onClick={() => history.push("/about")}>
-                  <ListItemText primary={"About"} />
-                </ListItemButton>
-              </ListItem>{" "}
               <ListItem disablePadding>
                 <ListItemButton onClick={() => handleNewGroupClick()}>
                   <ListItemText primary={"Create New Group"} />
@@ -229,6 +219,12 @@ const SideBar = ({ component, darkModeController }) => {
               <ListItem disablePadding>
                 <ListItemButton onClick={() => dispatch({ type: "LOGOUT" })}>
                   <ListItemText primary={"Logout"} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => history.push("/about")}>
+                  <ListItemText primary={"About"} />
                 </ListItemButton>
               </ListItem>
             </>
