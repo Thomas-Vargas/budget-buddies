@@ -13,6 +13,8 @@ import {
   FormControlLabel,
   FormLabel,
   FormControl,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
@@ -39,6 +41,7 @@ const NewGroupPage = () => {
   });
   const [categories, setCategories] = useState([]);
   const [groupType, setGroupType] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
   const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
   const [userErrorSnackOpen, setUserErrorSnackOpen] = React.useState(false);
@@ -158,6 +161,7 @@ const NewGroupPage = () => {
 
       //Dispatch to create new group
       dispatch({ type: "CREATE_GROUP", payload: newGroupObj });
+      setLoading(true);
       setSuccessSnackOpen(true);
       clearAllState();
     } else {
@@ -181,231 +185,247 @@ const NewGroupPage = () => {
 
   return (
     <div className="main-wrapper">
-      <div className="new-group-page">
-        <div className="create-group-form">
-          <Paper elevation={6} sx={{ padding: "40px" }}>
-            <Typography variant="h3" sx={{ mb: "40px" }}>
-              Create New Group
-            </Typography>
-            <div className="form-inputs">
-              <TextField
-                type="text"
-                label="Group Name"
-                variant="outlined"
-                required
-                onChange={(e) =>
-                  setNewBudget({ ...newBudget, name: e.target.value })
-                }
-              />
-              <FormControl>
-                <Typography variant="h4" mb="20px">
-                  Budget Type
+      {loading ? (
+        <Stack
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ marginTop: "25%" }}
+        >
+          <Box>
+            <CircularProgress />
+          </Box>
+        </Stack>
+      ) : (
+        <div>
+          <Stack direction="column" justifyContent="center" alignItems="center">
+            <Stack direction="row" gap="100px">
+              <Paper elevation={6} sx={{ padding: "40px" }}>
+                <Typography variant="h3" sx={{ mb: "40px" }}>
+                  Create New Group
                 </Typography>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Couple"
-                    onClick={() => handleGroupTypeClick("couple")}
-                  />
-                  <FormControlLabel
-                    value="other"
-                    control={<Radio />}
-                    label="Group"
-                    onClick={() => handleGroupTypeClick("group")}
-                  />
-                </RadioGroup>
-              </FormControl>
-              {groupType === "couple" && (
-                <div>
-                  <Typography variant="h4" mb="20px">
-                    Monthly Takehome
-                  </Typography>
-                  <Stack direction="column" gap="20px" width="50%">
-                    <TextField
-                      type="Number"
-                      label="Income"
-                      variant="outlined"
-                      required
-                      onChange={(e) => setIncome1(e.target.value)}
-                    />
-                    <TextField
-                      type="Number"
-                      label="Income"
-                      variant="outlined"
-                      onChange={(e) => setIncome2(e.target.value)}
-                    />
-                  </Stack>
-                </div>
-              )}
-
-              {groupType === "group" && (
-                <div>
-                  <Typography variant="h4" mb="20px">
-                    Target Cost Per Person
-                  </Typography>
-                  <Stack direction="row" gap="20px" width="50%">
-                    <TextField
-                      type="Number"
-                      label="Cost Per Person"
-                      variant="outlined"
-                      required
-                      onChange={(e) => setIncome1(e.target.value)}
-                    />
-                  </Stack>
-                </div>
-              )}
-            </div>
-
-            <div className="category-btn-group">
-              <Typography variant="h4" sx={{ margin: "40px 0px" }}>
-                Categories
-              </Typography>
-
-              <div className="category-form">
-                <TextField
-                  type="text"
-                  label="Name"
-                  variant="outlined"
-                  required
-                  value={newCategory.name}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, name: e.target.value })
-                  }
-                />
-                <TextField
-                  type="Number"
-                  label="Amount"
-                  variant="outlined"
-                  required
-                  value={newCategory.budgetAmount}
-                  onChange={(e) =>
-                    setNewCategory({
-                      ...newCategory,
-                      budgetAmount: e.target.value,
-                    })
-                  }
-                />
-                <Button
-                  variant="contained"
-                  onClick={addCategory}
-                  size="small"
-                  style={{ backgroundColor: "#5B4570" }}
-                >
-                  Add Category
-                </Button>
-              </div>
-
-              {categories.map((category, i) => (
-                <div className="category" key={category.name}>
-                  <Typography variant="h5" margin="20px 0px">
-                    {category.name}
-                  </Typography>
+                <div className="form-inputs">
                   <TextField
-                    type="Number"
-                    label="Amount"
+                    type="text"
+                    label="Group Name"
                     variant="outlined"
                     required
-                    value={category.budgetAmount}
-                    onChange={(e) => handleCategoryChange(e, category, i)}
+                    onChange={(e) =>
+                      setNewBudget({ ...newBudget, name: e.target.value })
+                    }
                   />
-                  <IconButton
-                    aria-label="delete"
-                    size="large"
-                    onClick={() => removeCategory(i)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  <FormControl>
+                    <Typography variant="h4" mb="20px">
+                      Budget Type
+                    </Typography>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <FormControlLabel
+                        value="male"
+                        control={<Radio />}
+                        label="Couple"
+                        onClick={() => handleGroupTypeClick("couple")}
+                      />
+                      <FormControlLabel
+                        value="other"
+                        control={<Radio />}
+                        label="Group"
+                        onClick={() => handleGroupTypeClick("group")}
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                  {groupType === "couple" && (
+                    <div>
+                      <Typography variant="h4" mb="20px">
+                        Monthly Takehome
+                      </Typography>
+                      <Stack direction="column" gap="20px" width="50%">
+                        <TextField
+                          type="Number"
+                          label="Income"
+                          variant="outlined"
+                          required
+                          onChange={(e) => setIncome1(e.target.value)}
+                        />
+                        <TextField
+                          type="Number"
+                          label="Income"
+                          variant="outlined"
+                          onChange={(e) => setIncome2(e.target.value)}
+                        />
+                      </Stack>
+                    </div>
+                  )}
+
+                  {groupType === "group" && (
+                    <div>
+                      <Typography variant="h4" mb="20px">
+                        Target Cost Per Person
+                      </Typography>
+                      <Stack direction="row" gap="20px" width="50%">
+                        <TextField
+                          type="Number"
+                          label="Cost Per Person"
+                          variant="outlined"
+                          required
+                          onChange={(e) => setIncome1(e.target.value)}
+                        />
+                      </Stack>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </Paper>
-        </div>
 
-        <div className="add-user">
-          <Paper elevation={6} sx={{ padding: "40px", height: "100%" }}>
-            <Typography variant="h3" margin="0px 0px 40px 0px">
-              Add User to Group
-            </Typography>
-            <div className="add-user-form">
-              {/* <TextField
-              type="text"
-              label="Username"
-              variant="outlined"
-              className="add-user-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            /> */}
+                <div className="category-btn-group">
+                  <Typography variant="h4" sx={{ margin: "40px 0px" }}>
+                    Categories
+                  </Typography>
 
-              <Autocomplete
-                options={allUsers
-                  .filter(
-                    (user) =>
-                      user.username !== currentUser.username &&
-                      !addedUsers.some(
-                        (addedUser) => addedUser.username === user.username
-                      )
-                  )
-                  .map((user) => user.username)}
-                sx={{ width: "60%" }}
-                onSelect={(e) => setUsername(e.target.value)}
-                value={username}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Add user"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                )}
-              />
+                  <div className="category-form">
+                    <TextField
+                      type="text"
+                      label="Name"
+                      variant="outlined"
+                      required
+                      value={newCategory.name}
+                      onChange={(e) =>
+                        setNewCategory({ ...newCategory, name: e.target.value })
+                      }
+                    />
+                    <TextField
+                      type="Number"
+                      label="Amount"
+                      variant="outlined"
+                      required
+                      value={newCategory.budgetAmount}
+                      onChange={(e) =>
+                        setNewCategory({
+                          ...newCategory,
+                          budgetAmount: e.target.value,
+                        })
+                      }
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={addCategory}
+                      size="small"
+                      style={{ backgroundColor: "#5B4570" }}
+                    >
+                      Add Category
+                    </Button>
+                  </div>
+
+                  {categories.map((category, i) => (
+                    <div className="category" key={category.name}>
+                      <Typography variant="h5" margin="20px 0px">
+                        {category.name}
+                      </Typography>
+                      <TextField
+                        type="Number"
+                        label="Amount"
+                        variant="outlined"
+                        required
+                        value={category.budgetAmount}
+                        onChange={(e) => handleCategoryChange(e, category, i)}
+                      />
+                      <IconButton
+                        aria-label="delete"
+                        size="large"
+                        onClick={() => removeCategory(i)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  ))}
+                </div>
+              </Paper>
+              {/*  */}
+              <div className="add-user">
+                <Paper elevation={6} sx={{ padding: "40px", height: "100%" }}>
+                  <Typography variant="h3" margin="0px 0px 40px 0px">
+                    Add User to Group
+                  </Typography>
+                  <div className="add-user-form">
+                    {/* <TextField
+                       type="text"
+                       label="Username"
+                       variant="outlined"
+                       className="add-user-input"
+                       value={username}
+                       onChange={(e) => setUsername(e.target.value)}
+                       required
+                     /> */}
+
+                    <Autocomplete
+                      options={allUsers
+                        .filter(
+                          (user) =>
+                            user.username !== currentUser.username &&
+                            !addedUsers.some(
+                              (addedUser) =>
+                                addedUser.username === user.username
+                            )
+                        )
+                        .map((user) => user.username)}
+                      sx={{ width: "60%" }}
+                      onSelect={(e) => setUsername(e.target.value)}
+                      value={username}
+                      freeSolo
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Add user"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                        />
+                      )}
+                    />
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        marginLeft: "20px",
+                      }}
+                      style={{ backgroundColor: "#5B4570" }}
+                      onClick={saveUserInState}
+                    >
+                      Add User
+                    </Button>
+                  </div>
+                  {addedUsers[0] &&
+                    addedUsers.map((user) => (
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        gap="10px"
+                        mt="20px"
+                        key={user.id}
+                      >
+                        <CheckIcon />
+                        <Typography>{user.username}</Typography>
+                        <IconButton onClick={() => removeUserFromGroup(user)}>
+                          <ClearIcon></ClearIcon>
+                        </IconButton>
+                      </Stack>
+                    ))}
+                </Paper>
+              </div>
+            </Stack>
+            <Stack direction="row" justifyContent="center">
               <Button
                 variant="contained"
-                size="small"
-                sx={{
-                  marginLeft: "20px",
-                }}
+                onClick={createNewGroup}
                 style={{ backgroundColor: "#5B4570" }}
-                onClick={saveUserInState}
+                sx={{ mt: "60px" }}
               >
-                Add User
+                Create Group
               </Button>
-            </div>
-            {addedUsers[0] &&
-              addedUsers.map((user) => (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  gap="10px"
-                  mt="20px"
-                  key={user.id}
-                >
-                  <CheckIcon />
-                  <Typography>{user.username}</Typography>
-                  <IconButton onClick={() => removeUserFromGroup(user)}>
-                    <ClearIcon></ClearIcon>
-                  </IconButton>
-                </Stack>
-              ))}
-          </Paper>
+            </Stack>
+          </Stack>
         </div>
-      </div>
-      <center>
-        <Button
-          variant="contained"
-          onClick={createNewGroup}
-          style={{ backgroundColor: "#5B4570" }}
-          sx={{ mt: "60px" }}
-        >
-          Create Group
-        </Button>
-      </center>
+      )}
 
       {/*  */}
 
