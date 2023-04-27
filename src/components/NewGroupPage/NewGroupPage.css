@@ -31,11 +31,6 @@
   width: 50%;
 }
 
-.new-group-page {
-  display: flex;
-  gap: 100px;
-}
-
 .add-user-header {
   margin-bottom: 30px;
 }
