@@ -122,8 +122,8 @@ const NewGroupPage = () => {
   const saveUserInState = () => {
     let validated = false;
     for (let user of allUsers) {
-      console.log("user in state:", user.username);
-      console.log("username to add:", username);
+      // console.log("user in state:", user.username);
+      // console.log("username to add:", username);
       if (user.username === username && user.username != currentUser.username) {
         validated = true;
       }
@@ -302,6 +302,7 @@ const NewGroupPage = () => {
                 sx={{ width: "60%" }}
                 onSelect={(e) => setUsername(e.target.value)}
                 value={username}
+                freeSolo
                 renderInput={(params) => (
                   <TextField
                     {...params}
