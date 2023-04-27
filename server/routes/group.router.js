@@ -119,14 +119,14 @@ router.post("/createGroup", rejectUnauthenticated, (req, res) => {
 //create user_group
 router.post("/createUserGroup", rejectUnauthenticated, (req, res) => {
   const queryText = `INSERT INTO "user_groups" ("userId", "groupsId")
-  VALUES  ($2, $1), ($3, $1);`;
+  VALUES  ($1, $2)`;
 
   // console.log('Req.body:', req.body)
 
   pool
-    .query(queryText, [req.body.groupId, req.body.userId, req.user.id])
+    .query(queryText, [req.body.userId, req.body.groupId])
     .then((result) => {
-      res.send(result.rows);
+      res.sendStatus(201);
     })
     .catch((err) => {
       console.log("Group creation failed: ", err);

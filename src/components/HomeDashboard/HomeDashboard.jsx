@@ -60,7 +60,7 @@ const HomeDashboard = () => {
                             <OpenInNewIcon></OpenInNewIcon>
                           </IconButton>
                         </Stack>
-                        <Box sx={{ padding: "0px 40px 40px 40px" }}>
+                        <Box sx={{ padding: "0px 40px 40px 40px", height: "230px"}}>
                           <Typography variant="h4" mb="20px">
                             {group.name}
                           </Typography>
