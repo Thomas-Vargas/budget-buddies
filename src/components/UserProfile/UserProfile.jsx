@@ -118,7 +118,6 @@ const UserProfile = () => {
         justifyContent="center"
         alignItems="center"
         gap="40px"
-        mt="20px"
       >
         <Paper elevation={6}>
           <Stack

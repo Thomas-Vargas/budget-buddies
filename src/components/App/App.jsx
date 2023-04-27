@@ -34,6 +34,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import HomeDashboard from "../HomeDashboard/HomeDashboard";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -165,11 +166,15 @@ function App() {
                 <SideBar darkModeController={<Controller />} component={<AllExpensesPage />} />
               </ProtectedRoute>
 
+              <ProtectedRoute exact path="/homeDashboard">
+                <SideBar darkModeController={<Controller />} component={<HomeDashboard />} />
+              </ProtectedRoute>
+
               <Route exact path="/login">
                 {user.id ? (
                   // If the user is already logged in,
-                  // redirect to the /user page
-                  <Redirect to="/user" />
+                  // redirect to the /homeDashboard page
+                  <Redirect to="/homeDashboard" />
                 ) : (
                   // Otherwise, show the login page
                   <LoginPage />
@@ -179,8 +184,8 @@ function App() {
               <Route exact path="/registration">
                 {user.id ? (
                   // If the user is already logged in,
-                  // redirect them to the /user page
-                  <Redirect to="/user" />
+                  // redirect them to the /homeDashboard page
+                  <Redirect to="/homeDashboard" />
                 ) : (
                   // Otherwise, show the registration page
                   <RegisterPage />
@@ -191,7 +196,7 @@ function App() {
                 {user.id ? (
                   // If the user is already logged in,
                   // redirect them to the /user page
-                  <Redirect to="/user" />
+                  <Redirect to="/homeDashboard" />
                 ) : (
                   // Otherwise, show the Landing page
                   <LandingPage />
