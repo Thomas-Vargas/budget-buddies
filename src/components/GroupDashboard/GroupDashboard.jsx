@@ -26,6 +26,7 @@ import ActivityFeed from "../ActivityFeed/ActivtyFeed";
 import EditGroupModal from "../EditGroupModal/EditGroupModal";
 
 import "./GroupDashboard.css";
+import CouplesGroupDataHeader from "../CouplesGroupDataHeader/CouplesGroupDataHeader";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -108,11 +109,6 @@ const GroupDashboard = () => {
     handleClose();
     setResetSuccessSnackOpen(true);
   };
-
-  const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
 
   setTimeout(() => {
     setLoading(false);
@@ -221,7 +217,7 @@ const GroupDashboard = () => {
                 alignItems="flex-end"
                 sx={{ marginBottom: "40px" }}
               >
-                <Stack direction="column" gap="10px">
+                {/* <Stack direction="column" gap="10px">
                   <Typography variant="h5">
                     Monthly Income: {currencyFormatter.format(monthlyIncome)}
                   </Typography>
@@ -254,7 +250,9 @@ const GroupDashboard = () => {
                       </span>
                     )}
                   </Typography>
-                </Stack>
+                </Stack> */}
+
+                <CouplesGroupDataHeader />
 
                 <Button
                   variant="contained"
