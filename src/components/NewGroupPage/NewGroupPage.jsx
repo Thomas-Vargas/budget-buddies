@@ -86,10 +86,9 @@ const NewGroupPage = () => {
     }
   }, [groupId, history]);
 
-  console.log(addedUsers);
+  // console.log(addedUsers);
   // console.log(categories);
   // console.log(newCategory);
-  console.log(addedUsers);
   //update budgetAmount on change
   const handleCategoryChange = (e, category, i) => {
     let newState = [...categories];
@@ -111,7 +110,7 @@ const NewGroupPage = () => {
     }
   };
 
-  console.log(categories);
+  // console.log(categories);
 
   const removeCategory = (i) => {
     let newState = [...categories];
@@ -169,9 +168,11 @@ const NewGroupPage = () => {
 
   const removeUserFromGroup = (userToRemove) => {
     let newState = [...addedUsers];
-    newState = newState.filter((user => user.username != userToRemove.username));
+    newState = newState.filter(
+      (user) => user.username != userToRemove.username
+    );
     setAddedUsers(newState);
-  }
+  };
 
   return (
     <div className="main-wrapper">
@@ -290,7 +291,13 @@ const NewGroupPage = () => {
 
               <Autocomplete
                 options={allUsers
-                  .filter((user) => user.username != currentUser.username)
+                  .filter(
+                    (user) =>
+                      user.username !== currentUser.username &&
+                      !addedUsers.some(
+                        (addedUser) => addedUser.username === user.username
+                      )
+                  )
                   .map((user) => user.username)}
                 sx={{ width: "60%" }}
                 onSelect={(e) => setUsername(e.target.value)}
@@ -325,7 +332,7 @@ const NewGroupPage = () => {
                   mt="20px"
                   key={user.id}
                 >
-                  <CheckIcon /> 
+                  <CheckIcon />
                   <Typography>{user.username}</Typography>
                   <IconButton onClick={() => removeUserFromGroup(user)}>
                     <ClearIcon></ClearIcon>
