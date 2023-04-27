@@ -8,6 +8,11 @@ import {
   Autocomplete,
   Paper,
   Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  FormControl,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
@@ -32,10 +37,8 @@ const NewGroupPage = () => {
     name: "",
     budgetAmount: "",
   });
-  const [categories, setCategories] = useState([
-    { name: "Rent", budgetAmount: "" },
-    { name: "Travel", budgetAmount: "" },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [groupType, setGroupType] = useState(null);
   const [errorSnackOpen, setErrorSnackOpen] = React.useState(false);
   const [successSnackOpen, setSuccessSnackOpen] = React.useState(false);
   const [userErrorSnackOpen, setUserErrorSnackOpen] = React.useState(false);
@@ -86,9 +89,6 @@ const NewGroupPage = () => {
     }
   }, [groupId, history]);
 
-  // console.log(addedUsers);
-  // console.log(categories);
-  // console.log(newCategory);
   //update budgetAmount on change
   const handleCategoryChange = (e, category, i) => {
     let newState = [...categories];
@@ -109,7 +109,6 @@ const NewGroupPage = () => {
       setCategoryErrorSnackOpen(true);
     }
   };
-
   // console.log(categories);
 
   const removeCategory = (i) => {
@@ -174,6 +173,12 @@ const NewGroupPage = () => {
     setAddedUsers(newState);
   };
 
+  const handleGroupTypeClick = (type) => {
+    setGroupType(type);
+    setIncome1("");
+    setIncome2("");
+  };
+
   return (
     <div className="main-wrapper">
       <div className="new-group-page">
@@ -192,20 +197,68 @@ const NewGroupPage = () => {
                   setNewBudget({ ...newBudget, name: e.target.value })
                 }
               />
-              <Typography variant="h4">Monthly Takehome</Typography>
-              <TextField
-                type="Number"
-                label="Income"
-                variant="outlined"
-                required
-                onChange={(e) => setIncome1(e.target.value)}
-              />
-              <TextField
-                type="Number"
-                label="Income"
-                variant="outlined"
-                onChange={(e) => setIncome2(e.target.value)}
-              />
+              <FormControl>
+                <Typography variant="h4" mb="20px">
+                  Budget Type
+                </Typography>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio />}
+                    label="Couple"
+                    onClick={() => handleGroupTypeClick("couple")}
+                  />
+                  <FormControlLabel
+                    value="other"
+                    control={<Radio />}
+                    label="Group"
+                    onClick={() => handleGroupTypeClick("group")}
+                  />
+                </RadioGroup>
+              </FormControl>
+              {groupType === "couple" && (
+                <div>
+                  <Typography variant="h4" mb="20px">
+                    Monthly Takehome
+                  </Typography>
+                  <Stack direction="column" gap="20px" width="50%">
+                    <TextField
+                      type="Number"
+                      label="Income"
+                      variant="outlined"
+                      required
+                      onChange={(e) => setIncome1(e.target.value)}
+                    />
+                    <TextField
+                      type="Number"
+                      label="Income"
+                      variant="outlined"
+                      onChange={(e) => setIncome2(e.target.value)}
+                    />
+                  </Stack>
+                </div>
+              )}
+
+              {groupType === "group" && (
+                <div>
+                  <Typography variant="h4" mb="20px">
+                    Target Cost Per Person
+                  </Typography>
+                  <Stack direction="row" gap="20px" width="50%">
+                    <TextField
+                      type="Number"
+                      label="Cost Per Person"
+                      variant="outlined"
+                      required
+                      onChange={(e) => setIncome1(e.target.value)}
+                    />
+                  </Stack>
+                </div>
+              )}
             </div>
 
             <div className="category-btn-group">
