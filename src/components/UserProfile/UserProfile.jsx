@@ -152,7 +152,7 @@ const UserProfile = () => {
             <Stack
               direction="column"
               alignItems="center"
-              sx={{ width: "100%" }}
+              sx={{ width: "250px" }}
               gap="20px"
               padding="50px"
             >
