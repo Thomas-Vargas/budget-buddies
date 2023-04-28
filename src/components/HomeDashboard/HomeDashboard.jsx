@@ -13,6 +13,8 @@ import UserProfile from "../UserProfile/UserProfile";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
+import "./HomeDashboard.css"
+
 const HomeDashboard = () => {
   const user = useSelector((store) => store.user);
   const allGroups = useSelector((store) => store.groups);
@@ -32,12 +34,12 @@ const HomeDashboard = () => {
 
   return (
     <div className="main-wrapper">
-      <Typography variant="h2" mb="20px">
+      <Typography variant="h3" mb="40px">
         Welcome, {user.username}
       </Typography>
 
-      <Stack direction="row" ml="27%">
-        <Typography variant="h3" mb="20px">
+      <Stack direction="row" justifyContent="flex-start">
+        <Typography variant="h4" mb="20px">
           Your groups
         </Typography>
       </Stack>
@@ -46,10 +48,17 @@ const HomeDashboard = () => {
         {allGroups[0] ? (
           <div>
             <Stack direction="row" gap="20px">
-              <Box sx={{ display: "flex", flexWrap: "wrap", width: "70%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
                 {allGroups[0] &&
                   allGroups.map((group) => (
-                    <Box sx={{ width: "50%", padding: "20px" }} key={group.id}>
+                    <Box sx={{ width: "100%", mb: "20px" }} key={group.id}>
                       <Paper elevation={6}>
                         <Stack direction="row" justifyContent="flex-end">
                           <IconButton
@@ -60,7 +69,12 @@ const HomeDashboard = () => {
                             <OpenInNewIcon></OpenInNewIcon>
                           </IconButton>
                         </Stack>
-                        <Box sx={{ padding: "0px 40px 40px 40px", height: "230px"}}>
+                        <Box
+                          sx={{
+                            padding: "0px 40px 40px 40px",
+                            height: "230px",
+                          }}
+                        >
                           <Typography variant="h4" mb="20px">
                             {group.name}
                           </Typography>
