@@ -13,8 +13,6 @@ import UserProfile from "../UserProfile/UserProfile";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import "./HomeDashboard.css"
-
 const HomeDashboard = () => {
   const user = useSelector((store) => store.user);
   const allGroups = useSelector((store) => store.groups);
@@ -24,6 +22,7 @@ const HomeDashboard = () => {
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
+    minimumFractionDigits: 0,
     currency: "USD",
   });
 

@@ -8,6 +8,7 @@ const GroupDataHeader = ({ totalMembers }) => {
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
+    minimumFractionDigits: 0,
     currency: "USD",
   });
   
