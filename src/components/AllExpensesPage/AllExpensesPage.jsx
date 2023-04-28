@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import DonutChart from "../DonutChart/DonutChart";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import "./AllExpensesPage.css";
 
@@ -76,6 +77,7 @@ const AllExpensesPage = () => {
               onClick={() => history.push(`/groupDashboard/${groupId.id}`)}
               style={{ backgroundColor: "#5B4570" }}
             >
+              <ArrowBackIosIcon fontSize="small" />
               Back
             </Button>
             <Typography variant="h3">{currentGroup.name}</Typography>

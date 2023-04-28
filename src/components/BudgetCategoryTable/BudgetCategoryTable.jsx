@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -250,9 +252,9 @@ const BudgetCategoryTable = ({ category }) => {
             justifyContent="flex-end"
             sx={{ width: "100%" }}
           >
-            <Button variant="contained" onClick={handleOpen} color="error">
-              Delete Category
-            </Button>
+            <IconButton onClick={handleOpen}>
+              <DeleteIcon></DeleteIcon>
+            </IconButton>
           </Stack>
         </Stack>
       </Paper>

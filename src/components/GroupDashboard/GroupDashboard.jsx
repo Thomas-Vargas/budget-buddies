@@ -24,6 +24,7 @@ import AddExpenseForm from "../AddExpenseForm/AddExpenseForm";
 import AddCategoryForm from "../AddCategoryForm/AddCategoryForm";
 import ActivityFeed from "../ActivityFeed/ActivtyFeed";
 import EditGroupModal from "../EditGroupModal/EditGroupModal";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import "./GroupDashboard.css";
 import CouplesGroupDataHeader from "../CouplesGroupDataHeader/CouplesGroupDataHeader";
@@ -148,6 +149,7 @@ const GroupDashboard = () => {
               style={{ backgroundColor: "#5B4570" }}
             >
               All Expenses
+              <ArrowForwardIosIcon fontSize="small" />
             </Button>
           </Stack>
           <Typography variant="h6">{todaysDate}</Typography>

@@ -1,0 +1,11 @@
+@media (min-width: 600px) {
+  .box {
+    width: 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .box {
+    width: 100%;
+  }
+}
