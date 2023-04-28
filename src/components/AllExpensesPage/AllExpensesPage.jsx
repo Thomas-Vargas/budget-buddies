@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import DonutChart from "../DonutChart/DonutChart";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import RadarChart from "../RadarChart/RadarChart";
 
 import "./AllExpensesPage.css";
 
@@ -124,8 +125,9 @@ const AllExpensesPage = () => {
             <Stack direction="column" sx={{ width: "70%" }}>
               <AllExpensesTable />
             </Stack>
-            <Stack sx={{ width: "30%" }}>
+            <Stack sx={{ width: "30%" }} >
               <DonutChart categoryTotals={categoryTotals} />
+              <RadarChart />
             </Stack>
           </Stack>
         </div>

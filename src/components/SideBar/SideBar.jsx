@@ -78,7 +78,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const SideBar = ({ component, darkModeController }) => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const user = useSelector((store) => store.user);
   const groups = useSelector((store) => store.groups);
   const history = useHistory();
