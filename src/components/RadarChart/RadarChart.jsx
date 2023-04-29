@@ -12,6 +12,7 @@ const RadarChart = () => {
   const allExpenses = useSelector((store) => store.expenses);
   const categories = useSelector((store) => store.categories);
   const members = useSelector((store) => store.currentGroup.members);
+  const theme = useSelector((store) => store.theme);
 
   useEffect(() => {
     if (allExpenses[0] && members[0]) {
@@ -144,10 +145,10 @@ const RadarChart = () => {
               borderWidth: 3,
             },
           },
-          gridColor: "white"
         },
       };
 
+      theme === "dark" ? Chart.defaults.borderColor = "#ffffff" : Chart.defaults.borderColor = "black"
       const newRadarChart = new Chart(document.getElementById("radar"), config);
       setRadarChart(newRadarChart);
     })();
@@ -159,10 +160,7 @@ const RadarChart = () => {
 
   return (
     <div>
-      <h1>Radar Chart</h1>
-      <Paper elevation={6}>
         <canvas id="radar"></canvas>
-      </Paper>
     </div>
   );
 };

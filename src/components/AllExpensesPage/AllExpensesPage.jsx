@@ -125,7 +125,7 @@ const AllExpensesPage = () => {
             <Stack direction="column" sx={{ width: "70%" }}>
               <AllExpensesTable />
             </Stack>
-            <Stack sx={{ width: "30%" }} >
+            <Stack sx={{ width: "30%" }} gap="40px">
               <DonutChart categoryTotals={categoryTotals} />
               <RadarChart />
             </Stack>
