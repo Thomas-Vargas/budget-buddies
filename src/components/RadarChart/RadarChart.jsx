@@ -85,8 +85,12 @@ const RadarChart = () => {
   useEffect(() => {
     let newRadarChart;
     if (firstUserExpenses[0] && secondUserExpenses[0] && chartCategories[0]) {
-      if (newRadarChart) {
-        newRadarChart.destroy();
+      // Get the chart instance
+      var chart = Chart.getChart("radar");
+
+      // If the chart instance exists, destroy it
+      if (chart) {
+        chart.destroy();
       }
       newRadarChart = makeRadarChart();
     }
@@ -144,7 +148,9 @@ const RadarChart = () => {
         },
       };
 
-      theme === "dark" ? Chart.defaults.borderColor = "#ffffff" : Chart.defaults.borderColor = "black"
+      theme === "dark"
+        ? (Chart.defaults.borderColor = "#ffffff")
+        : (Chart.defaults.borderColor = "black");
       const newRadarChart = new Chart(document.getElementById("radar"), config);
       setRadarChart(newRadarChart);
     })();
@@ -152,7 +158,7 @@ const RadarChart = () => {
 
   return (
     <div>
-        <canvas id="radar"></canvas>
+      <canvas id="radar"></canvas>
     </div>
   );
 };

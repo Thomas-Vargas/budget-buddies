@@ -59,7 +59,7 @@ router.get("/userGroups", rejectUnauthenticated, (req, res) => {
     "groups".name AS "name",
     "budget"."totalBudget" AS "totalBudget",
     "budget".id,
-    ARRAY_AGG(DISTINCT "user".username) AS "users",
+    ARRAY_AGG(DISTINCT "user".username) AS "members",
     sum(expenses.amount / 2) AS "totalSpent"
     FROM "user_groups"
     INNER JOIN "groups" ON "user_groups"."groupsId" = "groups".id
