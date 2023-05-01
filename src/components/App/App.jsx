@@ -81,6 +81,10 @@ function App() {
     []
   );
 
+  useEffect(() => {
+    dispatch({type: "SET_THEME", payload: mode})
+  }, [mode])
+
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user);
