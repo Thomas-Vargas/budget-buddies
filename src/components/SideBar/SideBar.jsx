@@ -95,7 +95,9 @@ const SideBar = ({ component, darkModeController }) => {
   const handleAllExpensesClick = (group) => {
     // dispatch({ type: "UNSET_CATEGORY_TOTALS" })
     // dispatch({ type: "FETCH_CATEGORY_TOTALS", payload: group.id });
+    console.log("group from sidebar click", group);
     dispatch({ type: "SET_CURRENT_GROUP", payload: group });
+    dispatch( {type: "FETCH_GROUP_CATEGORIES", payload: group.id} )
     history.push(`/allExpenses/${group.groupId}`);
   };
 

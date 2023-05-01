@@ -82,7 +82,7 @@ const HomeDashboard = () => {
                               <Typography variant="h5" mb="10px">
                                 Members
                               </Typography>
-                              {group.users.map((user) => (
+                              {group.members.map((user) => (
                                 <Typography key={user}>{user}</Typography>
                               ))}
                             </Grid>
