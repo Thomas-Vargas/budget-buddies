@@ -14,6 +14,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import RadarChart from "../RadarChart/RadarChart";
 
 import "./AllExpensesPage.css";
+import CouplesGroupDataHeader from "../CouplesGroupDataHeader/CouplesGroupDataHeader";
 
 const AllExpensesPage = () => {
   const [loading, setLoading] = useState(true);
@@ -87,45 +88,13 @@ const AllExpensesPage = () => {
             {todaysDate}
           </Typography>
 
-          <Stack direction="column" gap="10px">
-            <Typography variant="h5">
-              Monthly Income: {currencyFormatter.format(monthlyIncome)}
-            </Typography>
-            <Typography variant="h5">
-              Projected Monthly Budget:{" "}
-              {totalBudgetAmount > Math.round(currentGroup.totalBudget / 12) ? (
-                <span style={{ color: "red" }}>
-                  {currencyFormatter.format(totalBudgetAmount)}
-                </span>
-              ) : (
-                <span>{currencyFormatter.format(totalBudgetAmount)}</span>
-              )}
-            </Typography>
-            <Typography variant="h5">
-              Remaining Budget:{" "}
-              {totalMoneySpent > totalBudgetAmount ? (
-                <span style={{ color: "red" }}>
-                  {currencyFormatter.format(
-                    totalMoneySpent - totalBudgetAmount
-                  )}{" "}
-                  Over Projected Budget
-                </span>
-              ) : (
-                <span>
-                  {currencyFormatter.format(
-                    totalBudgetAmount - totalMoneySpent
-                  )}{" "}
-                  left
-                </span>
-              )}
-            </Typography>
-          </Stack>
+          <CouplesGroupDataHeader />
 
           <Stack direction="row" gap="40px">
             <Stack direction="column" sx={{ width: "70%" }}>
               <AllExpensesTable />
             </Stack>
-            <Stack sx={{ width: "30%" }} gap="40px">
+            <Stack sx={{ width: "30%" }} gap="40px" justifyContent="center">
               <DonutChart categoryTotals={categoryTotals} />
               <RadarChart />
             </Stack>

@@ -93,10 +93,6 @@ const RadarChart = () => {
   }, [firstUserExpenses, secondUserExpenses, chartCategories]);
 
   const makeRadarChart = () => {
-    if (radarChart) {
-      radarChart.destroy();
-    }
-
     (async function () {
       const data = {
         labels: chartCategories,
@@ -153,10 +149,6 @@ const RadarChart = () => {
       setRadarChart(newRadarChart);
     })();
   };
-
-  console.log("first user expenses:", firstUserExpenses);
-  console.log("second user expenses:", secondUserExpenses);
-  console.log("category names:", chartCategories);
 
   return (
     <div>

@@ -44,10 +44,6 @@ const DonutChart = ({}) => {
             legend: {
               position: "top",
             },
-            title: {
-              display: true,
-              text: "Categories",
-            },
           },
         },
       });
