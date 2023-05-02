@@ -46,7 +46,7 @@ const HomeDashboard = () => {
       <Stack direction="column" justifyContent="center" alignItems="center">
         {allGroups[0] ? (
           <div>
-            <Stack direction="row" gap="20px">
+            <Stack direction="row">
               <Box
                 sx={{
                   display: "flex",
