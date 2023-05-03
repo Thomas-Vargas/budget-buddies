@@ -5,9 +5,9 @@ import { SiRedux, SiReduxsaga, SiPostgresql } from "react-icons/si";
 import { TfiWorld } from "react-icons/tfi";
 import { IconContext } from "react-icons";
 
-function AboutPage() {
+function AboutPage({ wrapper }) {
   return (
-    <div>
+    <div className={wrapper}>
       <Paper elevation={8}>
         <Box padding="40px">
           <Stack alignItems="center" gap="40px">

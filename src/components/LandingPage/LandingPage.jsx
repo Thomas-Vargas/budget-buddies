@@ -15,7 +15,7 @@ function LandingPage() {
   };
 
   return (
-    <div className="wrapper-top-margin">
+    <div className="wrapper-top-margin-less">
       <h2>{heading}</h2>
 
       <div className="grid">

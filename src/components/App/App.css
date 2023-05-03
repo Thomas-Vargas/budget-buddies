@@ -17,6 +17,14 @@ body {
   margin: 200px 250px;
 }
 
+.wrapper-top-margin-less {
+  margin: 100px 250px;
+}
+
+.margin-sides {
+  margin: 0px 100px;
+}
+
 img {
   display: inline-block;
   max-width: 100%;

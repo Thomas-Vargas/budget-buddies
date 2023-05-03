@@ -57,18 +57,6 @@ function Controller() {
   );
 }
 
-// const theme = createTheme({
-//   palette: {
-//     mode: "light",
-//     primary: {
-//       main: "#014421",
-//     },
-//     secondary: {
-//       main: "#800000",
-//     },
-//   },
-// });
-
 function App() {
   // move state to reducer to make user choice persistent on page load.
   const [mode, setMode] = React.useState("light");
@@ -128,9 +116,9 @@ function App() {
                 path="/about"
               >
                 {user.id ? (
-                  <SideBar darkModeController={<Controller />}  component={<AboutPage />} />
+                  <SideBar darkModeController={<Controller />}  component={<AboutPage wrapper={"margin-sides"} />} />
                 ) : (
-                  <AboutPage />
+                  <AboutPage wrapper={"wrapper-top-margin-less"} />
                 )}
               </Route>
 
