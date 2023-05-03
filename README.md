@@ -1,2 +1,2 @@
 
-# Group Budgeting app (work/readme in progress)
+# Group Budgeting app (readme in progress)
